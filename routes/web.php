@@ -6,6 +6,7 @@ use App\Http\Controllers\DespesaWebController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\ProfileController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -37,3 +38,9 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->na
 Route::post('/register', [RegisterController::class, 'register']);
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+// Rotas de perfil
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
