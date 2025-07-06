@@ -1,33 +1,36 @@
 @extends('layout')
 @section('content')
-<div class="card p-4">
-    <h2 class="mb-4 fw-bold"><i class="fa fa-plus"></i> Nova Locação</h2>
-    <form action="{{ route('locacoes.store') }}" method="POST">
+<div class="bg-white rounded-lg shadow-sm p-4 max-w-md mx-auto border border-gray-100">
+    <div class="flex items-center gap-2 mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+        <h2 class="text-lg font-bold text-[#222]">Nova Locação</h2>
+    </div>
+    <form action="{{ route('locacoes.store') }}" method="POST" class="flex flex-col gap-3">
         @csrf
-        <div class="mb-3">
-            <label for="nome" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
+        <div>
+            <label for="nome" class="block text-xs text-gray-600 mb-1">Nome</label>
+            <input type="text" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="nome" name="nome" required>
         </div>
-        <div class="mb-3">
-            <label for="valor_total" class="form-label">Valor Total</label>
-            <div class="input-group">
-                <span class="input-group-text">R$</span>
-                <input type="number" step="0.01" class="form-control" id="valor_total" name="valor_total" required>
+        <div>
+            <label for="valor_total" class="block text-xs text-gray-600 mb-1">Valor Total</label>
+            <div class="flex items-center gap-1">
+                <span class="text-gray-500 text-xs">R$</span>
+                <input type="number" step="0.01" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="valor_total" name="valor_total" required>
             </div>
         </div>
-        <div class="row mb-3">
-            <div class="col">
-                <label for="data_inicio" class="form-label">Data Início</label>
-                <input type="date" class="form-control" id="data_inicio" name="data_inicio" required>
+        <div class="flex gap-2">
+            <div class="w-1/2">
+                <label for="data_inicio" class="block text-xs text-gray-600 mb-1">Data Início</label>
+                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_inicio" name="data_inicio" required>
             </div>
-            <div class="col">
-                <label for="data_fim" class="form-label">Data Fim</label>
-                <input type="date" class="form-control" id="data_fim" name="data_fim" required>
+            <div class="w-1/2">
+                <label for="data_fim" class="block text-xs text-gray-600 mb-1">Data Fim</label>
+                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_fim" name="data_fim" required>
             </div>
         </div>
-        <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
-            <a href="{{ route('locacoes.index') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Cancelar</a>
+        <div class="flex gap-2 mt-2">
+            <button type="submit" class="flex items-center gap-1 px-4 py-2 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg> Salvar</button>
+            <a href="{{ route('locacoes.index') }}" class="flex items-center gap-1 px-4 py-2 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200 transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg> Cancelar</a>
         </div>
     </form>
 </div>
