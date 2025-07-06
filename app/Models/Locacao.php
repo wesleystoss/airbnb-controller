@@ -14,4 +14,9 @@ class Locacao extends Model
     {
         return $this->hasMany(Despesa::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'locacao_user')->withPivot('papel')->withTimestamps();
+    }
 }

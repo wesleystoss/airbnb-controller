@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function locacoes()
+    {
+        return $this->belongsToMany(\App\Models\Locacao::class, 'locacao_user')->withPivot('papel')->withTimestamps();
+    }
 }

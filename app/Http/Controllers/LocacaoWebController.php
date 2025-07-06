@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Locacao;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class LocacaoWebController extends Controller
 {
@@ -16,7 +17,7 @@ class LocacaoWebController extends Controller
 
     public function index()
     {
-        $locacoes = Locacao::with('despesas')->orderBy('data_inicio')->get();
+        $locacoes = Auth::user()->locacoes()->with('despesas')->orderBy('data_inicio')->get();
         // Agrupar por mês/ano e calcular lucro (valor_total - coanfitrião - despesas)
         $resumoMensal = [];
         $resumoAnual = [];
@@ -47,7 +48,9 @@ class LocacaoWebController extends Controller
             'data_inicio' => 'required|date',
             'data_fim' => 'required|date',
         ]);
-        Locacao::create($validated);
+        $locacao = Locacao::create($validated);
+        $user = Auth::user();
+        $locacao->users()->attach($user->id, ['papel' => 'anfitriao']);
         return redirect()->route('locacoes.index');
     }
 
