@@ -24,28 +24,58 @@
         </div>
     </div>
 </div>
+@php
+    // Calcular o total do co-anfitrião por mês
+    $coanfitriaoMensal = [];
+    foreach ($locacoes as $locacao) {
+        $mes = \Carbon\Carbon::parse($locacao->data_inicio)->format('m/Y');
+        $coanfitriao = round($locacao->valor_total * 0.3333, 2);
+        $coanfitriaoMensal[$mes] = ($coanfitriaoMensal[$mes] ?? 0) + $coanfitriao;
+    }
+@endphp
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <script>
     const ctx = document.getElementById('lucroChart').getContext('2d');
     const lucroChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: {!! json_encode(array_keys($resumoMensal)) !!},
-            datasets: [{
-                label: 'Lucro Mensal (R$)',
-                data: {!! json_encode(array_values($resumoMensal)) !!},
-                backgroundColor: 'rgba(13, 110, 253, 0.6)',
-                borderColor: 'rgba(13, 110, 253, 1)',
-                borderWidth: 2,
-                borderRadius: 8,
-                maxBarThickness: 40
-            }]
+            datasets: [
+                {
+                    label: 'Saldo Final (R$)',
+                    data: {!! json_encode(array_values($resumoMensal)) !!},
+                    backgroundColor: '#22c55e', // verde Tailwind 500
+                    borderColor: '#16a34a', // verde Tailwind 600
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    maxBarThickness: 40
+                },
+                {
+                    label: 'Co-anfitrião (R$)',
+                    data: {!! json_encode(array_values($coanfitriaoMensal)) !!},
+                    backgroundColor: '#ff385c',
+                    borderColor: '#ff385c',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    maxBarThickness: 40
+                }
+            ]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { display: false },
-                title: { display: false }
+                legend: { display: true },
+                title: { display: false },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    color: '#222',
+                    font: { weight: 'bold', size: 12 },
+                    formatter: function(value) {
+                        return 'R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                    }
+                }
             },
             scales: {
                 y: {
@@ -57,7 +87,8 @@
                     }
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels]
     });
 </script>
 {{-- Seção de Locações --}}

@@ -56,8 +56,8 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($locacao->despesas as $despesa)
-                <tr class="border-b last:border-0">
+                @foreach($locacao->despesas as $index => $despesa)
+                <tr class="border-b last:border-0 {{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }}">
                     <td class="py-2 px-2 w-1/4 truncate text-center">{{ $despesa->descricao }}</td>
                     <td class="py-2 px-2 w-1/4 text-center">R$ {{ number_format($despesa->valor, 2, ',', '.') }}</td>
                     <td class="py-2 px-2 w-1/4 text-center">{{ \Carbon\Carbon::parse($despesa->data)->format('d/m/Y') }}</td>
