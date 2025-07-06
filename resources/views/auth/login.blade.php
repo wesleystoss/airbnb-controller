@@ -114,13 +114,6 @@
                     </div>
                 @endif
             </div>
-
-            <!-- Back to Home -->
-            <div class="text-center mt-6">
-                <a href="{{ url('/') }}" class="text-sm text-[#706f6c] hover:text-[#1b1b18] transition-colors">
-                    ← Voltar para o início
-                </a>
-            </div>
         </div>
     </body>
 </html>
