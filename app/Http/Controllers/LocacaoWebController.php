@@ -56,6 +56,11 @@ class LocacaoWebController extends Controller
 
     public function show(Locacao $locacao)
     {
+        if (!Auth::user()->locacoes()->where('locacao_id', $locacao->id)->exists()) {
+            return response()->view('locacoes.nao-autorizado', [
+                'mensagem' => 'Locação não localizada para este usuário.'
+            ], 403);
+        }
         $locacao->load('despesas');
         $totalDespesas = $locacao->despesas->sum('valor');
         $coanfitriao = round($locacao->valor_total * 0.3333, 2);
