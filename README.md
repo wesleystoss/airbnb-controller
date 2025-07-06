@@ -59,3 +59,163 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Deploy do Projeto Laravel na Hostinger (Hospedagem Compartilhada)
+
+## Pré-requisitos
+- Conta na Hostinger com acesso SSH ou FTP
+- Subdomínio criado e apontando para a pasta correta (ex: `public_html/portfolio/airbnb`)
+- Projeto Laravel pronto no seu repositório Git
+- Node.js e Composer instalados **localmente** (na sua máquina)
+
+---
+
+## Passo a Passo para Deploy
+
+### 1. Clone o projeto no servidor
+
+Acesse o SSH da Hostinger e vá até a pasta do subdomínio:
+```bash
+cd ~/public_html/portfolio/airbnb
+```
+Clone o repositório:
+```bash
+git clone <URL_DO_SEU_REPOSITORIO_GIT> .
+```
+
+---
+
+### 2. Instale as dependências PHP
+
+Se a Hostinger permitir:
+```bash
+composer install --no-dev --optimize-autoloader
+```
+Se não tiver composer no servidor, rode localmente e envie a pasta `vendor` para o servidor.
+
+---
+
+### 3. Instale as dependências e faça o build dos assets (Vite/Tailwind) **localmente**
+
+No seu computador:
+```bash
+npm install
+npm run build
+```
+Depois, envie a pasta `public/build` (ou `public/assets`) para o servidor, sobrescrevendo a pasta correspondente.
+
+---
+
+### 4. Crie o arquivo do banco de dados SQLite
+
+No SSH:
+```bash
+mkdir -p database
+cd database
+[ -f database.sqlite ] || touch database.sqlite
+chmod 664 database.sqlite
+cd ..
+```
+
+---
+
+### 5. Copie e configure o arquivo `.env`
+
+No SSH:
+```bash
+cp .env.example .env
+```
+Edite o arquivo `.env` e configure:
+```
+APP_ENV=production
+APP_DEBUG=false
+APP_KEY= # será gerada no próximo passo
+
+DB_CONNECTION=sqlite
+DB_DATABASE=/home/SEU_USUARIO/public_html/portfolio/airbnb/database/database.sqlite
+```
+
+---
+
+### 6. Gere a chave da aplicação
+
+No SSH:
+```bash
+php artisan key:generate
+```
+
+---
+
+### 7. Rode as migrações
+
+No SSH:
+```bash
+php artisan migrate --force
+```
+
+---
+
+### 8. Ajuste permissões
+
+No SSH:
+```bash
+chmod -R 775 storage bootstrap/cache
+```
+
+---
+
+### 9. (Opcional) Limpe o cache de configuração
+
+No SSH:
+```bash
+php artisan config:cache
+```
+
+---
+
+## Estrutura Recomendada
+
+```
+public_html/
+└── portfolio/
+    └── airbnb/
+        ├── app/
+        ├── bootstrap/
+        ├── config/
+        ├── database/
+        │   └── database.sqlite
+        ├── public/
+        │   ├── index.php
+        │   ├── build/
+        │   └── ...
+        ├── resources/
+        ├── routes/
+        ├── storage/
+        ├── vendor/
+        ├── .env
+        └── ...
+```
+
+- O subdomínio deve apontar para a pasta `public` do projeto (`public_html/portfolio/airbnb/public`).
+
+---
+
+## Dicas
+- Sempre rode `npm run build` **localmente** e envie os arquivos gerados para o servidor.
+- O arquivo `.env` **nunca** deve ser enviado para repositórios públicos.
+- Se usar outro banco (MySQL), ajuste as variáveis do `.env` conforme os dados do painel da Hostinger.
+- Se der erro de permissão, ajuste com `chmod` conforme acima.
+
+---
+
+## Dúvidas Frequentes
+- **Página padrão da Hostinger aparecendo:**
+  Verifique se o subdomínio está apontando para a pasta `public` do Laravel.
+- **Erro de chave de aplicação:**
+  Rode `php artisan key:generate`.
+- **Erro de banco de dados:**
+  Verifique o caminho do banco no `.env` e as permissões do arquivo.
+
+---
+
+Pronto! Seu projeto Laravel estará rodando na Hostinger. Se precisar de mais detalhes, consulte a [documentação oficial do Laravel](https://laravel.com/docs) ou o suporte da Hostinger.
