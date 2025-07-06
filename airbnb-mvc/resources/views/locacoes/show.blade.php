@@ -10,16 +10,29 @@
             <span class="text-gray-500">Nome:</span> <span class="font-semibold">{{ $locacao->nome }}</span><br>
             <span class="text-gray-500">Período:</span> <span class="inline-flex items-center gap-1"><svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' /></svg> {{ \Carbon\Carbon::parse($locacao->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($locacao->data_fim)->format('d/m/Y') }}</span>
         </div>
-        <div>
-            <span class="text-gray-500">Valor Total:</span> <span class="font-semibold">R$ {{ number_format($locacao->valor_total, 2, ',', '.') }}</span><br>
-            <span class="text-gray-500">Co-anfitrião (33,33%):</span> <span class="font-semibold text-[#FF385C]">R$ {{ number_format($coanfitriao, 2, ',', '.') }}</span><br>
-            <span class="text-gray-500">Despesas:</span> <span class="font-semibold">R$ {{ number_format($totalDespesas, 2, ',', '.') }}</span><br>
-            <span class="text-gray-500">Saldo Final:</span> <span class="font-bold {{ $saldo < 0 ? 'text-red-500' : 'text-green-600' }}">R$ {{ number_format($saldo, 2, ',', '.') }}</span>
+        <div class="flex flex-col gap-2">
+            <div class="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded px-2 py-1">
+                <span class="text-lg">💰</span>
+                <span class="text-gray-500">Valor Total:</span> <span class="font-semibold text-blue-900">R$ {{ number_format($locacao->valor_total, 2, ',', '.') }}</span>
+            </div>
+            <div class="flex items-center gap-2 bg-yellow-50 border border-yellow-100 rounded px-2 py-1">
+                <span class="text-lg">🤝</span>
+                <span class="text-gray-500">Co-anfitrião (33,33%):</span> <span class="font-semibold text-yellow-700">R$ {{ number_format($coanfitriao, 2, ',', '.') }}</span>
+            </div>
+            <div class="flex items-center gap-2 bg-red-50 border border-red-100 rounded px-2 py-1">
+                <span class="text-lg">💸</span>
+                <span class="text-gray-500">Despesas:</span> <span class="font-semibold text-red-600">R$ {{ number_format($totalDespesas, 2, ',', '.') }}</span>
+            </div>
+            <div class="flex items-center gap-2 bg-green-50 border border-green-100 rounded px-2 py-1">
+                <span class="text-lg">🧮</span>
+                <span class="text-gray-500">Saldo Final:</span> <span class="font-bold {{ $saldo < 0 ? 'text-red-500' : 'text-green-600' }}">R$ {{ number_format($saldo, 2, ',', '.') }}</span>
+            </div>
         </div>
     </div>
-    <div class="bg-gray-50 border border-gray-200 rounded p-2 text-xs mb-3">
-        <span class="font-semibold">Racional do cálculo:</span><br>
-        Valor total: <b>R$ {{ number_format($locacao->valor_total, 2, ',', '.') }}</b> - Co-anfitrião: <b>R$ {{ number_format($coanfitriao, 2, ',', '.') }}</b> - Despesas: <b>R$ {{ number_format($totalDespesas, 2, ',', '.') }}</b> = <b>Saldo final: R$ {{ number_format($saldo, 2, ',', '.') }}</b>
+    <div class="bg-gray-100 border border-gray-200 rounded p-3 text-xs mb-3 mt-2 flex items-center gap-2">
+        <span class="text-lg">📝</span>
+        <span><span class="font-semibold">Racional do cálculo:</span><br>
+        Valor total: <b>R$ {{ number_format($locacao->valor_total, 2, ',', '.') }}</b> - Co-anfitrião: <b>R$ {{ number_format($coanfitriao, 2, ',', '.') }}</b> - Despesas: <b>R$ {{ number_format($totalDespesas, 2, ',', '.') }}</b> = <b>Saldo final: R$ {{ number_format($saldo, 2, ',', '.') }}</b></span>
     </div>
     <div class="flex gap-2 mb-2">
         <a href="{{ route('despesas.create', $locacao->id) }}" class="flex items-center gap-1 px-3 py-1 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg> Nova Despesa</a>
