@@ -11,7 +11,7 @@ class LocacaoWebController extends Controller
 {
     public function index()
     {
-        $locacoes = Locacao::with('despesas')->get();
+        $locacoes = Locacao::with('despesas')->orderBy('data_inicio')->get();
         // Agrupar por mês/ano e calcular lucro (valor_total - coanfitrião - despesas)
         $resumoMensal = [];
         $resumoAnual = [];
