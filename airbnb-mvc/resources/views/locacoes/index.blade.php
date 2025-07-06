@@ -6,7 +6,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h3.28a2 2 0 011.42.59l1.3 1.3a2 2 0 001.42.59H19a2 2 0 012 2v10a2 2 0 01-2 2z" /></svg>
         <h4 class="font-bold text-base text-[#222]">Lucro Mensal</h4>
     </div>
-    <canvas id="lucroChart" height="80" class="mb-4"></canvas>
+    <canvas id="lucroChart" height="140" class="mb-4"></canvas>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
         <div class="flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-lg p-4 shadow-sm">
             <span class="text-2xl">📅</span>
@@ -25,12 +25,17 @@
     </div>
 </div>
 @php
-    // Calcular o total do co-anfitrião por mês
+    // Calcular totais por mês
     $coanfitriaoMensal = [];
+    $despesasMensal = [];
+    $locacoesMensal = [];
     foreach ($locacoes as $locacao) {
         $mes = \Carbon\Carbon::parse($locacao->data_inicio)->format('m/Y');
         $coanfitriao = round($locacao->valor_total * 0.3333, 2);
         $coanfitriaoMensal[$mes] = ($coanfitriaoMensal[$mes] ?? 0) + $coanfitriao;
+        $despesas = $locacao->despesas->sum('valor');
+        $despesasMensal[$mes] = ($despesasMensal[$mes] ?? 0) + $despesas;
+        $locacoesMensal[$mes] = ($locacoesMensal[$mes] ?? 0) + $locacao->valor_total;
     }
 @endphp
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -43,10 +48,10 @@
             labels: {!! json_encode(array_keys($resumoMensal)) !!},
             datasets: [
                 {
-                    label: 'Saldo Final (R$)',
-                    data: {!! json_encode(array_values($resumoMensal)) !!},
-                    backgroundColor: '#22c55e', // verde Tailwind 500
-                    borderColor: '#16a34a', // verde Tailwind 600
+                    label: 'Locações (R$)',
+                    data: {!! json_encode(array_values($locacoesMensal)) !!},
+                    backgroundColor: '#a78bfa', // roxo Tailwind 400
+                    borderColor: '#7c3aed', // roxo Tailwind 600
                     borderWidth: 2,
                     borderRadius: 8,
                     maxBarThickness: 40
@@ -56,6 +61,24 @@
                     data: {!! json_encode(array_values($coanfitriaoMensal)) !!},
                     backgroundColor: '#ff385c',
                     borderColor: '#ff385c',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    maxBarThickness: 40
+                },
+                {
+                    label: 'Despesas (R$)',
+                    data: {!! json_encode(array_values($despesasMensal)) !!},
+                    backgroundColor: '#3b82f6',
+                    borderColor: '#1d4ed8',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    maxBarThickness: 40
+                },
+                {
+                    label: 'Saldo Final (R$)',
+                    data: {!! json_encode(array_values($resumoMensal)) !!},
+                    backgroundColor: '#22c55e',
+                    borderColor: '#16a34a',
                     borderWidth: 2,
                     borderRadius: 8,
                     maxBarThickness: 40
@@ -70,6 +93,7 @@
                 datalabels: {
                     anchor: 'end',
                     align: 'end',
+                    offset: -8,
                     color: '#222',
                     font: { weight: 'bold', size: 12 },
                     formatter: function(value) {
@@ -77,9 +101,15 @@
                     }
                 }
             },
+            layout: {
+                padding: {
+                    top: 32
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: true,
+                    suggestedMax: Math.max(...{!! json_encode(array_values($locacoesMensal)) !!}, ...{!! json_encode(array_values($resumoMensal)) !!}, ...{!! json_encode(array_values($coanfitriaoMensal)) !!}, ...{!! json_encode(array_values($despesasMensal)) !!}) * 1.25,
                     ticks: {
                         callback: function(value) {
                             return 'R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2});
@@ -124,7 +154,7 @@
             @endphp
             <div class="flex flex-wrap gap-2 text-xs text-gray-500 mb-1">
                 <span class="inline-flex items-center gap-1">
-                    <svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' /></svg>
+                    <svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z' /></svg>
                     {{ \Carbon\Carbon::parse($locacao->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($locacao->data_fim)->format('d/m/Y') }}
                 </span>
                 <span class="inline-flex items-center gap-1">
