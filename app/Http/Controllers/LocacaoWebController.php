@@ -9,6 +9,11 @@ use Illuminate\Support\Carbon;
 
 class LocacaoWebController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $locacoes = Locacao::with('despesas')->orderBy('data_inicio')->get();
