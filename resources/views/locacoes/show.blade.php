@@ -49,9 +49,9 @@
         <table class="min-w-full table-fixed w-full text-xs">
             <thead class="bg-gray-50 text-gray-500">
                 <tr>
-                    <th class="py-2 px-2 w-1/4 text-left">Descrição</th>
-                    <th class="py-2 px-2 w-1/4 text-left">Valor</th>
-                    <th class="py-2 px-2 w-1/4 text-left">Data</th>
+                    <th class="py-2 px-2 w-1/4 text-center">Descrição</th>
+                    <th class="py-2 px-2 w-1/4 text-center">Valor</th>
+                    <th class="py-2 px-2 w-1/4 text-center">Data</th>
                     <th class="py-2 px-2 w-1/4 text-center">Ações</th>
                 </tr>
             </thead>
