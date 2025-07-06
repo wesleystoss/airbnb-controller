@@ -19,10 +19,7 @@
                 <input type="number" step="0.01" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="valor" name="valor" value="{{ $despesa->valor }}" required>
             </div>
         </div>
-        <div>
-            <label for="data" class="block text-xs text-gray-600 mb-1">Data</label>
-            <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data" name="data" value="{{ $despesa->data }}" required>
-        </div>
+
         <div class="flex gap-2 mt-2">
             <button type="submit" class="flex items-center gap-1 px-4 py-2 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6 6M3 21h6a2 2 0 002-2v-6a2 2 0 00-2-2H3v8z" /></svg> Salvar</button>
             <a href="{{ route('locacoes.show', $despesa->locacao_id) }}" class="flex items-center gap-1 px-4 py-2 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200 transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg> Cancelar</a>

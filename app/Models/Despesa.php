@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Despesa extends Model
 {
     protected $fillable = [
-        'locacao_id', 'descricao', 'valor', 'data'
+        'locacao_id', 'descricao', 'valor'
     ];
 
     public function locacao()

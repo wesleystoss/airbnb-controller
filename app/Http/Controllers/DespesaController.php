@@ -33,7 +33,6 @@ class DespesaController extends Controller
             'locacao_id' => 'required|exists:locacaos,id',
             'descricao' => 'required|string',
             'valor' => 'required|numeric',
-            'data' => 'required|date',
         ]);
         $despesa = Despesa::create($validated);
         return response()->json($despesa, 201);
@@ -64,7 +63,6 @@ class DespesaController extends Controller
             'locacao_id' => 'sometimes|exists:locacaos,id',
             'descricao' => 'sometimes|string',
             'valor' => 'sometimes|numeric',
-            'data' => 'sometimes|date',
         ]);
         $despesa->update($validated);
         return response()->json($despesa);

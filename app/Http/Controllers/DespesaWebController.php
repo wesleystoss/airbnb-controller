@@ -19,10 +19,16 @@ class DespesaWebController extends Controller
         $validated = $request->validate([
             'descricao' => 'required|string',
             'valor' => 'required|numeric',
-            'data' => 'required|date',
         ]);
         $validated['locacao_id'] = $locacao->id;
         Despesa::create($validated);
+        
+        // Se o botão "Criar e Continuar" foi clicado, redireciona para o formulário de nova despesa
+        if ($request->has('criar_e_continuar')) {
+            return redirect()->route('despesas.create', $locacao->id)
+                           ->with('success', 'Despesa criada com sucesso!');
+        }
+        
         return redirect()->route('locacoes.show', $locacao->id);
     }
 
@@ -36,7 +42,6 @@ class DespesaWebController extends Controller
         $validated = $request->validate([
             'descricao' => 'required|string',
             'valor' => 'required|numeric',
-            'data' => 'required|date',
         ]);
         $despesa->update($validated);
         return redirect()->route('locacoes.show', $despesa->locacao_id);

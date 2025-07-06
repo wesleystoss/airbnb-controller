@@ -128,20 +128,12 @@
         <h2 class="text-lg font-bold text-[#222]">Locações do mês</h2>
         <form method="GET" class="ml-auto flex items-center gap-2">
             <label for="periodo" class="text-xs text-gray-500">Período:</label>
-            <input type="month" id="periodo" name="periodo" value="{{ request('periodo', now()->format('Y-m')) }}" class="rounded border border-gray-200 px-2 py-1 text-xs focus:ring-2 focus:ring-[#FF385C] focus:outline-none">
+            <input type="month" id="periodo" name="periodo" value="{{ $periodo }}" class="rounded border border-gray-200 px-2 py-1 text-xs focus:ring-2 focus:ring-[#FF385C] focus:outline-none">
             <button type="submit" class="px-3 py-1 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm">Filtrar</button>
         </form>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        @php
-            $periodo = request('periodo', now()->format('Y-m'));
-            $locacoesFiltradas = $locacoes->filter(function($locacao) use ($periodo) {
-                return \Carbon\Carbon::parse($locacao->data_inicio)->format('Y-m') === $periodo;
-            })->sortByDesc(function($locacao) {
-                return $locacao->data_inicio;
-            });
-        @endphp
-        @forelse($locacoesFiltradas as $locacao)
+        @forelse($locacoes as $locacao)
         <div class="bg-white rounded-lg shadow-sm p-3 flex flex-col gap-1 border border-gray-100">
             <div class="flex items-center gap-2 mb-1">
                 <svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4 text-[#FF385C] flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6' /><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h3.28a2 2 0 011.42.59l1.3 1.3a2 2 0 001.42.59H19a2 2 0 012 2v10a2 2 0 01-2 2z' /></svg>
@@ -188,6 +180,9 @@
         @empty
         <div class="col-span-2 text-center text-gray-500 py-8">Nenhuma locação cadastrada para este período.</div>
         @endforelse
+    </div>
+    <div class="mt-6">
+        {{ $locacoes->links() }}
     </div>
 </div>
 @endsection 

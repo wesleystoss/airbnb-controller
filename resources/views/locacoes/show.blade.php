@@ -54,19 +54,17 @@
         <table class="min-w-full table-fixed w-full text-xs">
             <thead class="bg-gray-50 text-gray-500">
                 <tr>
-                    <th class="py-2 px-2 w-1/4 text-center">Descrição</th>
-                    <th class="py-2 px-2 w-1/4 text-center">Valor</th>
-                    <th class="py-2 px-2 w-1/4 text-center">Data</th>
-                    <th class="py-2 px-2 w-1/4 text-center">Ações</th>
+                    <th class="py-2 px-2 w-1/3 text-center">Descrição</th>
+                    <th class="py-2 px-2 w-1/3 text-center">Valor</th>
+                    <th class="py-2 px-2 w-1/3 text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($locacao->despesas as $index => $despesa)
                 <tr class="border-b last:border-0 {{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }}">
-                    <td class="py-2 px-2 w-1/4 truncate text-center">{{ $despesa->descricao }}</td>
-                    <td class="py-2 px-2 w-1/4 text-center">R$ {{ number_format($despesa->valor, 2, ',', '.') }}</td>
-                    <td class="py-2 px-2 w-1/4 text-center">{{ \Carbon\Carbon::parse($despesa->data)->format('d/m/Y') }}</td>
-                    <td class="py-2 px-2 w-1/4 text-center">
+                    <td class="py-2 px-2 w-1/3 truncate text-center">{{ $despesa->descricao }}</td>
+                    <td class="py-2 px-2 w-1/3 text-center">R$ {{ number_format($despesa->valor, 2, ',', '.') }}</td>
+                    <td class="py-2 px-2 w-1/3 text-center">
                         <div class="flex justify-center gap-2">
                             <a href="{{ route('despesas.edit', $despesa->id) }}" class="flex items-center gap-1 px-2 py-1 rounded bg-yellow-100 text-yellow-800 hover:bg-yellow-200 text-xs font-medium transition shadow-sm whitespace-nowrap"><svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6 6M3 21h6a2 2 0 002-2v-6a2 2 0 00-2-2H3v8z" /></svg> Editar</a>
                             <form action="{{ route('despesas.destroy', $despesa->id) }}" method="POST" onsubmit="return confirm('Tem certeza?')" class="inline-block">

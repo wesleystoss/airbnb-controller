@@ -17,11 +17,22 @@ class LocacaoWebController extends Controller
 
     public function index()
     {
-        $locacoes = Auth::user()->locacoes()->with('despesas')->orderBy('data_inicio')->get();
+        $periodo = request('periodo', now()->format('Y-m'));
+        
+        // Query para locações com filtro por período
+        $query = Auth::user()->locacoes()->with('despesas')->orderBy('data_inicio', 'desc');
+        $query->whereYear('data_inicio', substr($periodo, 0, 4))
+              ->whereMonth('data_inicio', substr($periodo, 5, 2));
+        
+        $locacoes = $query->paginate(10)->withQueryString();
+        
+        // Query separada para calcular resumos (todas as locações do usuário, sem paginação)
+        $todasLocacoes = Auth::user()->locacoes()->with('despesas')->get();
+        
         // Agrupar por mês/ano e calcular lucro (valor_total - coanfitrião - despesas)
         $resumoMensal = [];
         $resumoAnual = [];
-        foreach ($locacoes as $locacao) {
+        foreach ($todasLocacoes as $locacao) {
             $mes = Carbon::parse($locacao->data_inicio)->format('m/Y');
             $ano = Carbon::parse($locacao->data_inicio)->format('Y');
             $coanfitriao = round($locacao->valor_total * 0.3333, 2);
@@ -32,7 +43,8 @@ class LocacaoWebController extends Controller
         }
         ksort($resumoMensal);
         ksort($resumoAnual);
-        return view('locacoes.index', compact('locacoes', 'resumoMensal', 'resumoAnual'));
+        
+        return view('locacoes.index', compact('locacoes', 'resumoMensal', 'resumoAnual', 'periodo'));
     }
 
     public function create()
