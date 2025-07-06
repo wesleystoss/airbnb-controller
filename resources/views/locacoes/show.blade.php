@@ -37,6 +37,11 @@
     <div class="flex gap-2 mb-2">
         <a href="{{ route('despesas.create', $locacao->id) }}" class="flex items-center gap-1 px-3 py-1 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg> Nova Despesa</a>
         <a href="{{ route('locacoes.edit', $locacao->id) }}" class="flex items-center gap-1 px-3 py-1 rounded bg-yellow-100 text-yellow-800 hover:bg-yellow-200 text-xs font-medium transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6 6M3 21h6a2 2 0 002-2v-6a2 2 0 00-2-2H3v8z" /></svg> Editar</a>
+        <form action="{{ route('locacoes.destroy', $locacao->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta locação?')" class="inline-block">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="flex items-center gap-1 px-3 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200 text-xs font-medium transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg> Excluir</button>
+        </form>
         <a href="{{ route('locacoes.index') }}" class="flex items-center gap-1 px-3 py-1 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-xs font-medium transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z" /></svg> Voltar</a>
     </div>
 </div>
