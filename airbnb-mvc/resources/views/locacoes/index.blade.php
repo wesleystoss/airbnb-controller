@@ -7,14 +7,20 @@
         <h4 class="font-bold text-base text-[#222]">Lucro Mensal</h4>
     </div>
     <canvas id="lucroChart" height="80" class="mb-4"></canvas>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-        <div class="bg-blue-50 border border-blue-100 rounded p-2 text-xs">
-            <strong>Resumo do mês atual ({{ now()->format('m/Y') }}):</strong><br>
-            R$ {{ number_format($resumoMensal[now()->format('m/Y')] ?? 0, 2, ',', '.') }}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+        <div class="flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-lg p-4 shadow-sm">
+            <span class="text-2xl">📅</span>
+            <div>
+                <div class="text-xs text-gray-500 font-semibold">Resumo do mês atual ({{ now()->format('m/Y') }}):</div>
+                <div class="text-xl font-bold text-blue-900">R$ {{ number_format($resumoMensal[now()->format('m/Y')] ?? 0, 2, ',', '.') }}</div>
+            </div>
         </div>
-        <div class="bg-green-50 border border-green-100 rounded p-2 text-xs">
-            <strong>Resumo do ano ({{ now()->format('Y') }}):</strong><br>
-            R$ {{ number_format($resumoAnual[now()->format('Y')] ?? 0, 2, ',', '.') }}
+        <div class="flex items-center gap-3 bg-green-50 border border-green-100 rounded-lg p-4 shadow-sm">
+            <span class="text-2xl">📈</span>
+            <div>
+                <div class="text-xs text-gray-500 font-semibold">Resumo do ano ({{ now()->format('Y') }}):</div>
+                <div class="text-xl font-bold text-green-900">R$ {{ number_format($resumoAnual[now()->format('Y')] ?? 0, 2, ',', '.') }}</div>
+            </div>
         </div>
     </div>
 </div>
