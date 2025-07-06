@@ -69,7 +69,7 @@
                     </div>
 
                     <!-- Remember Me -->
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between mt-2">
                         <label class="flex items-center">
                             <input 
                                 type="checkbox" 
@@ -89,7 +89,7 @@
                     <!-- Submit Button -->
                     <button 
                         type="submit" 
-                        class="w-full bg-[#1b1b18] text-white py-2 px-4 rounded-sm font-medium hover:bg-black transition-colors"
+                        class="w-full bg-[#1b1b18] text-white py-2 px-4 rounded-sm font-medium hover:bg-black transition-colors mt-4"
                     >
                         Entrar
                     </button>
@@ -104,13 +104,9 @@
 
                 <!-- Register Link -->
                 @if (Route::has('register'))
-                    <div class="text-center">
-                        <p class="text-sm text-[#706f6c]">
-                            Não tem uma conta? 
-                            <a href="{{ route('register') }}" class="text-[#f53003] hover:underline font-medium">
-                                Criar conta
-                            </a>
-                        </p>
+                    <div class="text-center mt-6">
+                        <p class="text-sm text-[#706f6c] mb-2">Ainda não tem uma conta?</p>
+                        <a href="{{ route('register') }}" class="inline-block w-full px-4 py-2 rounded bg-[#FF385C] text-white font-semibold text-sm hover:bg-[#e11d48] transition">Criar nova conta</a>
                     </div>
                 @endif
             </div>
