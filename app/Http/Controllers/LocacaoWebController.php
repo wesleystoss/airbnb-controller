@@ -51,7 +51,7 @@ class LocacaoWebController extends Controller
         $locacao = Locacao::create($validated);
         $user = Auth::user();
         $locacao->users()->attach($user->id, ['papel' => 'anfitriao']);
-        return redirect()->route('locacoes.index');
+        return redirect()->route('locacoes.show', $locacao->id);
     }
 
     public function show(Locacao $locacao)
