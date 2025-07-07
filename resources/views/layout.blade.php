@@ -21,13 +21,13 @@
                         Nova Locação
                     </a>
                     @auth
-                        <div x-data="{ open: false }" class="relative">
-                            <button @click="open = !open" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 text-[#1b1b18] font-semibold hover:bg-gray-200 transition">
+                        <div x-data="{ open: false }" class="relative select-none">
+                            <button @click="open = !open" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 text-[#1b1b18] font-semibold hover:bg-gray-200 transition focus:outline-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#FF385C]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke="#FF385C" stroke-width="2" fill="#fff"/></svg>
                                 {{ Auth::user()->name }}
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
-                            <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg z-30">
+                            <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg z-30" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" style="display: none;">
                                 <a href="{{ route('profile.show') }}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-b border-gray-100">
                                     <div class="flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
