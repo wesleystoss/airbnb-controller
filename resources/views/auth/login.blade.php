@@ -29,8 +29,8 @@
             <!-- Login Form -->
             <div class="bg-white shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] rounded-lg p-6">
                 <div id="google-login-btn">
-                    <a href="{{ route('google.login') }}" class="w-full flex items-center justify-center gap-2 mb-4 px-4 py-2 rounded bg-white border border-[#e3e3e0] text-[#1b1b18] font-medium shadow hover:bg-gray-50 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-5 h-5"><g><path fill="#4285F4" d="M24 9.5c3.54 0 6.7 1.22 9.19 3.23l6.87-6.87C36.68 2.39 30.77 0 24 0 14.82 0 6.71 5.48 2.69 13.44l8.06 6.26C12.5 13.13 17.77 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.55c0-1.64-.15-3.22-.43-4.74H24v9.01h12.42c-.54 2.9-2.18 5.36-4.65 7.03l7.19 5.6C43.93 37.13 46.1 31.36 46.1 24.55z"/><path fill="#FBBC05" d="M10.75 28.7c-1.01-2.99-1.01-6.21 0-9.2l-8.06-6.26C.23 17.09 0 20.49 0 24c0 3.51.23 6.91 2.69 10.76l8.06-6.26z"/><path fill="#EA4335" d="M24 48c6.48 0 11.92-2.15 15.89-5.85l-7.19-5.6c-2.01 1.35-4.59 2.15-8.7 2.15-6.23 0-11.5-3.63-13.25-8.7l-8.06 6.26C6.71 42.52 14.82 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></g></svg>
+                    <a href="javascript:void(0);" onclick="loginWithGoogle()" class="w-full flex items-center justify-center gap-2 mb-4 px-4 py-2 rounded bg-white border border-[#e3e3e0] text-[#1b1b18] font-medium shadow hover:bg-gray-50 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-5 h-5"><g><path fill="#4285F4" d="M24 9.5c3.54 0 6.7 1.22 9.19 3.23l6.87-6.87C36.68 2.39 30.77 0 24 0 14.82 0 6.71 5.48 2.69 13.44l8.06 6.26C12.5 13.13 17.77 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.55c0-1.64-.15-3.22-.43-4.74H24v9.01h12.42c-.54 2.9-2.18 5.36-4.65 7.03l7.19 5.6C43.93 37.13 46.1 31.36 46.1 24.55z"/><path fill="#FBBC05" d="M10.75 28.7c-1.01-2.99-1.01-6.41 0-9.4l-8.06-6.26C-1.13 18.52-1.13 29.48 2.69 36.56l8.06-6.26z"/><path fill="#EA4335" d="M24 44c6.77 0 12.68-2.39 17.06-6.5l-7.19-5.6c-2.01 1.35-4.6 2.1-7.87 2.1-6.23 0-11.5-3.63-13.25-8.8l-8.06 6.26C6.71 42.52 14.82 48 24 48z"/></g></svg>
                         Entrar com Google
                     </a>
                 </div>
@@ -119,12 +119,41 @@
         </div>
         <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var isWebView = /(wv|webview|android.*version\/\d+\.\d+|; wv\)/i.test(navigator.userAgent);
+            // Detecta WebView Android/iOS de forma robusta
+            var isWebView = (function() {
+                var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                // Android WebView
+                if (/wv|webview|; wv\)/i.test(userAgent)) return true;
+                // iOS WebView
+                if ((/iPhone|iPod|iPad/i.test(userAgent)) && !/Safari/i.test(userAgent)) return true;
+                // Cordova/Capacitor
+                if (window.cordova || window.Capacitor) return true;
+                return false;
+            })();
             var btn = document.getElementById('google-login-btn');
             if (btn && isWebView) {
                 btn.style.display = 'none';
             }
         });
+
+        function loginWithGoogle() {
+            // Detecta se está no app Android (WebView)
+            if (window.AndroidApp && typeof window.AndroidApp.loginWithGoogle === 'function') {
+                window.AndroidApp.loginWithGoogle();
+            } else {
+                window.location.href = "{{ route('google.login') }}";
+            }
+        }
+        // Função para receber o idToken do app Android (opcional)
+        window.onGoogleLogin = function(idToken) {
+            // Exemplo: enviar o token para o backend via fetch
+            // fetch('/api/auth/google-mobile', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ idToken })
+            // }).then(...)
+            // Ou redirecionar para uma rota protegida após autenticar
+        }
         </script>
     </body>
 </html>
