@@ -41,4 +41,8 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'google_android' => [
+        'client_id' => env('GOOGLE_ANDROID_CLIENT_ID'),
+    ],
+
 ];
