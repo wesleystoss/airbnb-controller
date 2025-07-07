@@ -32,6 +32,7 @@ class LocacaoWebController extends Controller
         // Agrupar por mês/ano e calcular lucro (valor_total - coanfitrião - despesas)
         $resumoMensal = [];
         $resumoAnual = [];
+        $mesesDisponiveis = [];
         foreach ($todasLocacoes as $locacao) {
             $mes = Carbon::parse($locacao->data_inicio)->format('m/Y');
             $ano = Carbon::parse($locacao->data_inicio)->format('Y');
@@ -40,11 +41,13 @@ class LocacaoWebController extends Controller
             $lucro = $locacao->valor_total - $coanfitriao - $despesas;
             $resumoMensal[$mes] = ($resumoMensal[$mes] ?? 0) + $lucro;
             $resumoAnual[$ano] = ($resumoAnual[$ano] ?? 0) + $lucro;
+            $mesesDisponiveis[$mes] = Carbon::parse($locacao->data_inicio)->format('Y-m');
         }
         ksort($resumoMensal);
         ksort($resumoAnual);
+        krsort($mesesDisponiveis); // mais recentes primeiro
         
-        return view('locacoes.index', compact('locacoes', 'resumoMensal', 'resumoAnual', 'periodo'));
+        return view('locacoes.index', compact('locacoes', 'resumoMensal', 'resumoAnual', 'periodo', 'mesesDisponiveis'));
     }
 
     public function create()

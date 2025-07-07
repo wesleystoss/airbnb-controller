@@ -128,7 +128,11 @@
         <h2 class="text-lg font-bold text-[#222]">Locações do mês</h2>
         <form method="GET" class="ml-auto flex items-center gap-2">
             <label for="periodo" class="text-xs text-gray-500">Período:</label>
-            <input type="month" id="periodo" name="periodo" value="{{ $periodo }}" class="rounded border border-gray-200 px-2 py-1 text-xs focus:ring-2 focus:ring-[#FF385C] focus:outline-none">
+            <select id="periodo" name="periodo" class="rounded border border-gray-200 px-2 py-1 text-xs focus:ring-2 focus:ring-[#FF385C] focus:outline-none w-56 min-w-full" style="min-width:200px; width:240px;">
+                @foreach($mesesDisponiveis as $mesLabel => $mesValue)
+                    <option value="{{ $mesValue }}" @if($periodo == $mesValue) selected @endif>{{ $mesLabel }}</option>
+                @endforeach
+            </select>
             <button type="submit" class="px-3 py-1 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm">Filtrar</button>
         </form>
     </div>
