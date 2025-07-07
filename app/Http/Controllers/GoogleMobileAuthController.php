@@ -23,15 +23,20 @@ class GoogleMobileAuthController extends Controller
             // Procura ou cria o usuário
             $user = User::firstOrCreate(
                 ['email' => $email],
-                ['name' => $name, 'password' => bcrypt(uniqid())]
+                ['name' => $name]
             );
 
+            // Faz login de sessão web
             Auth::login($user);
 
-            // Retorne um token (exemplo usando Sanctum)
+            // Retorna token de API (opcional)
             $token = $user->createToken('mobile')->plainTextToken;
 
-            return response()->json(['token' => $token, 'user' => $user]);
+            return response()->json([
+                'status' => 'success',
+                'token' => $token,
+                'user' => $user,
+            ]);
         } else {
             return response()->json(['error' => 'Token inválido'], 401);
         }

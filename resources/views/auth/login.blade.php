@@ -118,24 +118,6 @@
             </div>
         </div>
         <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Detecta WebView Android/iOS de forma robusta
-            var isWebView = (function() {
-                var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                // Android WebView
-                if (/wv|webview|; wv\)/i.test(userAgent)) return true;
-                // iOS WebView
-                if ((/iPhone|iPod|iPad/i.test(userAgent)) && !/Safari/i.test(userAgent)) return true;
-                // Cordova/Capacitor
-                if (window.cordova || window.Capacitor) return true;
-                return false;
-            })();
-            var btn = document.getElementById('google-login-btn');
-            if (btn && isWebView) {
-                btn.style.display = 'none';
-            }
-        });
-
         function loginWithGoogle() {
             // Se estiver no app Android (WebView), chama o método nativo
             if (window.AndroidApp && typeof window.AndroidApp.loginWithGoogle === 'function') {
