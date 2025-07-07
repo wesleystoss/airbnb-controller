@@ -137,22 +137,27 @@
         });
 
         function loginWithGoogle() {
-            // Detecta se está no app Android (WebView)
+            // Se estiver no app Android (WebView), chama o método nativo
             if (window.AndroidApp && typeof window.AndroidApp.loginWithGoogle === 'function') {
                 window.AndroidApp.loginWithGoogle();
             } else {
+                // Fora do app, faz o login Google normal do site
                 window.location.href = "{{ route('google.login') }}";
             }
         }
         // Função para receber o idToken do app Android (opcional)
         window.onGoogleLogin = function(idToken) {
-            // Exemplo: enviar o token para o backend via fetch
-            // fetch('/api/auth/google-mobile', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ idToken })
-            // }).then(...)
-            // Ou redirecionar para uma rota protegida após autenticar
+            // Exemplo: autenticar no backend
+            fetch('/api/auth/google-mobile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idToken })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Redireciona ou recarrega a página após autenticar
+                window.location.reload();
+            });
         }
         </script>
     </body>
