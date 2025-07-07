@@ -28,10 +28,12 @@
 
             <!-- Login Form -->
             <div class="bg-white shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] rounded-lg p-6">
-                <a href="{{ route('google.login') }}" class="w-full flex items-center justify-center gap-2 mb-4 px-4 py-2 rounded bg-white border border-[#e3e3e0] text-[#1b1b18] font-medium shadow hover:bg-gray-50 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-5 h-5"><g><path fill="#4285F4" d="M24 9.5c3.54 0 6.7 1.22 9.19 3.23l6.87-6.87C36.68 2.39 30.77 0 24 0 14.82 0 6.71 5.48 2.69 13.44l8.06 6.26C12.5 13.13 17.77 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.55c0-1.64-.15-3.22-.43-4.74H24v9.01h12.42c-.54 2.9-2.18 5.36-4.65 7.03l7.19 5.6C43.93 37.13 46.1 31.36 46.1 24.55z"/><path fill="#FBBC05" d="M10.75 28.7c-1.01-2.99-1.01-6.21 0-9.2l-8.06-6.26C.23 17.09 0 20.49 0 24c0 3.51.23 6.91 2.69 10.76l8.06-6.26z"/><path fill="#EA4335" d="M24 48c6.48 0 11.92-2.15 15.89-5.85l-7.19-5.6c-2.01 1.35-4.59 2.15-8.7 2.15-6.23 0-11.5-3.63-13.25-8.7l-8.06 6.26C6.71 42.52 14.82 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></g></svg>
-                    Entrar com Google
-                </a>
+                <div id="google-login-btn">
+                    <a href="{{ route('google.login') }}" class="w-full flex items-center justify-center gap-2 mb-4 px-4 py-2 rounded bg-white border border-[#e3e3e0] text-[#1b1b18] font-medium shadow hover:bg-gray-50 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-5 h-5"><g><path fill="#4285F4" d="M24 9.5c3.54 0 6.7 1.22 9.19 3.23l6.87-6.87C36.68 2.39 30.77 0 24 0 14.82 0 6.71 5.48 2.69 13.44l8.06 6.26C12.5 13.13 17.77 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.55c0-1.64-.15-3.22-.43-4.74H24v9.01h12.42c-.54 2.9-2.18 5.36-4.65 7.03l7.19 5.6C43.93 37.13 46.1 31.36 46.1 24.55z"/><path fill="#FBBC05" d="M10.75 28.7c-1.01-2.99-1.01-6.21 0-9.2l-8.06-6.26C.23 17.09 0 20.49 0 24c0 3.51.23 6.91 2.69 10.76l8.06-6.26z"/><path fill="#EA4335" d="M24 48c6.48 0 11.92-2.15 15.89-5.85l-7.19-5.6c-2.01 1.35-4.59 2.15-8.7 2.15-6.23 0-11.5-3.63-13.25-8.7l-8.06 6.26C6.71 42.52 14.82 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></g></svg>
+                        Entrar com Google
+                    </a>
+                </div>
                 <form method="POST" action="{{ route('login') }}" class="space-y-4">
                     @csrf
                     
@@ -115,5 +117,14 @@
                 @endif
             </div>
         </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var isWebView = /(wv|webview|android.*version\/\d+\.\d+|; wv\)/i.test(navigator.userAgent);
+            var btn = document.getElementById('google-login-btn');
+            if (btn && isWebView) {
+                btn.style.display = 'none';
+            }
+        });
+        </script>
     </body>
 </html>
