@@ -55,7 +55,7 @@
                 </div>
             </div>
         </header>
-        <main class="pt-20 max-w-4xl mx-auto px-4 mb-16 pb-20 flex-1">
+        <main class="pt-20 max-w-4xl mx-auto px-4 mb-16 pb-20 flex-1 text-base">
             @if(session('success'))
                 <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-2 rounded mb-4">{{ session('success') }}</div>
             @endif
