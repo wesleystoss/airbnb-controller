@@ -33,6 +33,9 @@ class LocacaoWebController extends Controller
         $resumoMensal = [];
         $resumoAnual = [];
         $mesesDisponiveis = [];
+        $locacoesMensal = [];
+        $coanfitriaoMensal = [];
+        $despesasMensal = [];
         foreach ($todasLocacoes as $locacao) {
             $mes = Carbon::parse($locacao->data_inicio)->format('m/Y');
             $ano = Carbon::parse($locacao->data_inicio)->format('Y');
@@ -42,12 +45,23 @@ class LocacaoWebController extends Controller
             $resumoMensal[$mes] = ($resumoMensal[$mes] ?? 0) + $lucro;
             $resumoAnual[$ano] = ($resumoAnual[$ano] ?? 0) + $lucro;
             $mesesDisponiveis[$mes] = Carbon::parse($locacao->data_inicio)->format('Y-m');
+            $locacoesMensal[$mes] = ($locacoesMensal[$mes] ?? 0) + $locacao->valor_total;
+            $coanfitriaoMensal[$mes] = ($coanfitriaoMensal[$mes] ?? 0) + $coanfitriao;
+            $despesasMensal[$mes] = ($despesasMensal[$mes] ?? 0) + $despesas;
+        }
+        // Garante que todos os meses presentes no resumoMensal estejam em todos os arrays
+        foreach (array_keys($resumoMensal) as $mes) {
+            $locacoesMensal[$mes] = $locacoesMensal[$mes] ?? 0;
+            $coanfitriaoMensal[$mes] = $coanfitriaoMensal[$mes] ?? 0;
+            $despesasMensal[$mes] = $despesasMensal[$mes] ?? 0;
         }
         ksort($resumoMensal);
         ksort($resumoAnual);
         krsort($mesesDisponiveis); // mais recentes primeiro
-        
-        return view('locacoes.index', compact('locacoes', 'resumoMensal', 'resumoAnual', 'periodo', 'mesesDisponiveis'));
+        ksort($locacoesMensal);
+        ksort($coanfitriaoMensal);
+        ksort($despesasMensal);
+        return view('locacoes.index', compact('locacoes', 'resumoMensal', 'resumoAnual', 'periodo', 'mesesDisponiveis', 'locacoesMensal', 'coanfitriaoMensal', 'despesasMensal'));
     }
 
     public function create()

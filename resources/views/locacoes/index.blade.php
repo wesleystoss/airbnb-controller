@@ -25,18 +25,7 @@
     </div>
 </div>
 @php
-    // Calcular totais por mês
-    $coanfitriaoMensal = [];
-    $despesasMensal = [];
-    $locacoesMensal = [];
-    foreach ($locacoes as $locacao) {
-        $mes = \Carbon\Carbon::parse($locacao->data_inicio)->format('m/Y');
-        $coanfitriao = round($locacao->valor_total * 0.3333, 2);
-        $coanfitriaoMensal[$mes] = ($coanfitriaoMensal[$mes] ?? 0) + $coanfitriao;
-        $despesas = $locacao->despesas->sum('valor');
-        $despesasMensal[$mes] = ($despesasMensal[$mes] ?? 0) + $despesas;
-        $locacoesMensal[$mes] = ($locacoesMensal[$mes] ?? 0) + $locacao->valor_total;
-    }
+    // Arrays já vêm prontos do controller: $locacoesMensal, $coanfitriaoMensal, $despesasMensal
 @endphp
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
