@@ -28,11 +28,14 @@
 
             <!-- Login Form -->
             <div class="bg-white shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] rounded-lg p-6">
-                <div id="google-login-btn">
-                    <a href="javascript:void(0);" onclick="loginWithGoogle()" class="w-full flex items-center justify-center gap-2 mb-4 px-4 py-2 rounded bg-white border border-[#e3e3e0] text-[#1b1b18] font-medium shadow hover:bg-gray-50 transition">
+                <div id="google-login-btn" style="display: block !important; opacity: 1 !important; visibility: visible !important;">
+                    <a href="javascript:void(0);" onclick="loginWithGoogle()" class="w-full flex items-center justify-center gap-2 mb-4 px-4 py-2 rounded bg-white border border-[#e3e3e0] text-[#1b1b18] font-medium shadow hover:bg-gray-50 transition" style="display: flex !important; opacity: 1 !important; visibility: visible !important;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-5 h-5"><g><path fill="#4285F4" d="M24 9.5c3.54 0 6.7 1.22 9.19 3.23l6.87-6.87C36.68 2.39 30.77 0 24 0 14.82 0 6.71 5.48 2.69 13.44l8.06 6.26C12.5 13.13 17.77 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.55c0-1.64-.15-3.22-.43-4.74H24v9.01h12.42c-.54 2.9-2.18 5.36-4.65 7.03l7.19 5.6C43.93 37.13 46.1 31.36 46.1 24.55z"/><path fill="#FBBC05" d="M10.75 28.7c-1.01-2.99-1.01-6.41 0-9.4l-8.06-6.26C-1.13 18.52-1.13 29.48 2.69 36.56l8.06-6.26z"/><path fill="#EA4335" d="M24 44c6.77 0 12.68-2.39 17.06-6.5l-7.19-5.6c-2.01 1.35-4.6 2.1-7.87 2.1-6.23 0-11.5-3.63-13.25-8.8l-8.06 6.26C6.71 42.52 14.82 48 24 48z"/></g></svg>
                         Entrar com Google
                     </a>
+                    <noscript>
+                        <div style="color: red; font-weight: bold;">Ative o JavaScript para ver o botão de login com Google.</div>
+                    </noscript>
                 </div>
                 <form method="POST" action="{{ route('login') }}" class="space-y-4">
                     @csrf
