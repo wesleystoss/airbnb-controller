@@ -38,6 +38,7 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->na
 Route::post('/register', [RegisterController::class, 'register']);
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+Route::get('auth/google/mobile', [App\Http\Controllers\Auth\GoogleController::class, 'mobileLogin'])->name('google.mobile');
 
 // Rotas de perfil
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
