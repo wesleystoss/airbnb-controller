@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
     <meta name="theme-color" content="#FF385C">
     <meta name="msapplication-TileColor" content="#FF385C">
     @vite('resources/css/app.css')
