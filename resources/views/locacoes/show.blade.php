@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-<div class="bg-white rounded-lg shadow-sm p-4 mb-4 border border-gray-100">
+<div class="bg-white rounded-lg shadow-sm p-4 mb-4 border border-gray-100 max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto">
     <div class="flex items-center gap-2 mb-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h3.28a2 2 0 011.42.59l1.3 1.3a2 2 0 001.42.59H19a2 2 0 012 2v10a2 2 0 01-2 2z" /></svg>
         <h2 class="text-lg font-bold text-[#222]">Detalhes da Locação</h2>
@@ -45,7 +45,7 @@
         <a href="{{ route('locacoes.index') }}" class="flex items-center gap-1 px-3 py-1 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-xs font-medium transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z" /></svg> Voltar</a>
     </div>
 </div>
-<div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+<div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100 max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto">
     <h4 class="font-bold text-sm text-[#222] mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" /></svg> Despesas</h4>
     @if($locacao->despesas->isEmpty())
         <div class="text-gray-500 text-xs py-4 text-center">Nenhuma despesa cadastrada para esta locação.</div>

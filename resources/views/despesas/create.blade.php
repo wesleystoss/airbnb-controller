@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-<div class="bg-white rounded-lg shadow-sm p-4 max-w-md mx-auto border border-gray-100">
+<div class="bg-white rounded-lg shadow-sm p-4 max-w-md mx-auto border border-gray-100 max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto">
     <div class="flex items-center gap-2 mb-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
         <h2 class="text-lg font-bold text-[#222]">Nova Despesa para {{ $locacao->nome }}</h2>
