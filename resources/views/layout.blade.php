@@ -130,7 +130,7 @@
         </header>
         
         <!-- Conteúdo Principal -->
-        <main class="pt-32 lg:pt-40 max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto px-4 lg:px-12 pb-20 flex-1">
+        <main class="pt-20 lg:pt-24 max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto px-4 lg:px-12 pb-20 flex-1">
             <!-- Notificações -->
             @if(session('success'))
                 <div class="mb-4 p-4 bg-green-50/80 backdrop-blur-sm border border-green-200/50 rounded-2xl text-green-800 text-sm shadow-lg">
