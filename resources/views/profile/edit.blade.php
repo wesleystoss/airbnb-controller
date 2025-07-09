@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
 <div class="max-w-xl mx-auto">
-    <div class="bg-white rounded-lg shadow p-6 border border-gray-100">
+    <div class="bg-white rounded-lg shadow p-6 border border-gray-100 mb-4">
         <div class="flex items-center gap-3 mb-6">
             <div class="w-12 h-12 bg-[#FF385C] rounded-full flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

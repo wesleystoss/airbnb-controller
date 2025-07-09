@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto">
     <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
         <div class="flex items-center gap-3 mb-6">
             <div class="w-12 h-12 bg-[#FF385C] rounded-full flex items-center justify-center">

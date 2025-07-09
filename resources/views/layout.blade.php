@@ -73,8 +73,8 @@
 <body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen">
     <div class="min-h-screen flex flex-col">
         <!-- Header Mobile-First -->
-        <header class="w-full bg-white/80 backdrop-blur-md border-b border-gray-200/50 fixed top-0 left-0 z-50">
-            <div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto flex items-center justify-between px-4 lg:px-12 py-3 lg:py-6">
+        <header class="w-full bg-white/80 backdrop-blur-md border-b border-gray-200/50 fixed top-0 left-0 z-50 px-4">
+            <div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto flex items-center justify-between py-3 lg:py-6">
                 <a href="{{ route('home') }}" class="flex items-center gap-2 lg:gap-4">
                     <div class="w-8 h-8 lg:w-12 lg:h-12 bg-gradient-to-r from-[#FF385C] to-[#e11d48] rounded-lg flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-5 h-5 lg:w-8 lg:h-8 text-white">
@@ -130,7 +130,8 @@
         </header>
         
         <!-- Conteúdo Principal -->
-        <main class="pt-20 lg:pt-24 max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto px-4 lg:px-12 pb-20 flex-1">
+        <main class="pt-[80px] lg:pt-[130px] w-full pb-20 flex-1 mb-4">
+            <div class="px-4 lg:px-12">
             <!-- Notificações -->
             @if(session('success'))
                 <div class="mb-4 p-4 bg-green-50/80 backdrop-blur-sm border border-green-200/50 rounded-2xl text-green-800 text-sm shadow-lg">
@@ -161,6 +162,7 @@
             @endif
             
             @yield('content')
+            </div>
         </main>
     </div>
     
