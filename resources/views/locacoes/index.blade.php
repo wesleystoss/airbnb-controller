@@ -1,14 +1,14 @@
 @extends('layout')
 @section('content')
-<h1 class="text-lg font-bold text-[#222] mb-4 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='w-5 h-5 text-[#FF385C] flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 7v10a4 4 0 004 4h10a4 4 0 004-4V7' /><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 3v4M8 3v4M4 11h16' /></svg> Locações</h1>
-<div class="mt-8 max-w-6xl mx-auto px-2 md:px-8">
+<h1 class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto px-4 lg:px-12 text-lg font-bold text-[#222] mb-4 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='w-5 h-5 text-[#FF385C] flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 7v10a4 4 0 004 4h10a4 4 0 004-4V7' /><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 3v4M8 3v4M4 11h16' /></svg> Locações</h1>
+<div class="max-w-3xl mx-auto px-4 lg:px-12">
     <div class="bg-white rounded-lg shadow-sm p-4 mb-6 border border-gray-100">
         <div class="flex items-center gap-2 mb-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h3.28a2 2 0 011.42.59l1.3 1.3a2 2 0 001.42.59H19a2 2 0 012 2v10a2 2 0 01-2 2z" /></svg>
             <h4 class="font-bold text-base text-[#222]">Lucro Mensal</h4>
         </div>
-        <div class="w-full overflow-x-auto">
-            <canvas id="lucroChart" height="500" style="min-width:500px; max-width:100%;"></canvas>
+        <div class="overflow-x-auto w-full">
+            <canvas id="lucroChart" height="300"></canvas>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
             <div class="flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-lg p-4 shadow-sm">
@@ -33,6 +33,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script>
+        // Não definir min-width ou width no canvas
         const ctx = document.getElementById('lucroChart').getContext('2d');
         const isMobile = window.innerWidth < 640;
         const lucroChart = new Chart(ctx, {
@@ -87,7 +88,7 @@
                     datalabels: {
                         anchor: 'end',
                         align: 'end',
-                        offset: -8,
+                        offset: 12,
                         color: '#222',
                         font: { weight: 'bold', size: isMobile ? 10 : 12 },
                         formatter: function(value) {
@@ -140,7 +141,7 @@
             </form>
         </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         @forelse($locacoes as $locacao)
         <div class="bg-white rounded-lg shadow-sm p-3 flex flex-col gap-1 border border-gray-100 text-base min-w-0">
             <div class="flex items-center gap-2 mb-1">
