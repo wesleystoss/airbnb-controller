@@ -8,7 +8,7 @@
             <h4 class="font-bold text-base text-[#222]">Lucro Mensal</h4>
         </div>
         <div class="overflow-x-auto w-full">
-            <canvas id="lucroChart" height="300"></canvas>
+            <canvas id="lucroChart" height="300" class="min-w-[550px] min-h-[440px]"></canvas>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
             <div class="flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-lg p-4 shadow-sm">
@@ -132,12 +132,12 @@
             <h2 class="text-lg font-bold text-[#222]">Locações do mês</h2>
             <form method="GET" class="flex flex-col sm:flex-row flex-wrap items-center gap-2 ml-auto w-full sm:w-auto">
                 <label for="periodo" class="text-xs text-gray-500">Período:</label>
-                <select id="periodo" name="periodo" class="rounded border border-gray-200 px-2 py-1 text-xs focus:ring-2 focus:ring-[#FF385C] focus:outline-none w-full sm:w-56" style="min-width:0;">
+                <select id="periodo" name="periodo" class="rounded border border-gray-200 px-2 py-1 text-xs focus:ring-2 focus:ring-[#FF385C] focus:outline-none w-full sm:w-56 min-h-[40px]" style="min-width:0;">
                     @foreach($mesesDisponiveis as $mesLabel => $mesValue)
                         <option value="{{ $mesValue }}" @if($periodo == $mesValue) selected @endif>{{ $mesLabel }}</option>
                     @endforeach
                 </select>
-                <button type="submit" class="w-full sm:w-auto px-3 py-2 sm:py-1 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm">Filtrar</button>
+                <button type="submit" class="w-full sm:w-auto px-3 py-2 sm:py-1 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm min-h-[40px]">Filtrar</button>
             </form>
         </div>
     </div>
