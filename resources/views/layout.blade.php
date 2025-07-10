@@ -136,7 +136,7 @@
         </header>
         
         <!-- Conteúdo Principal -->
-        <main class="pt-[80px] lg:pt-[130px] w-full pb-20 flex-1 mb-4">
+        <main class="pt-[80px] lg:pt-[130px] w-full pb-24 flex-1 mb-4">
             <div class="px-4 lg:px-12">
             <!-- Notificações -->
             @if(session('success'))
@@ -173,7 +173,7 @@
     </div>
     
     <!-- Footer Mobile -->
-    <footer class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-200/50 z-40">
+    <footer class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-200/50 z-30">
         <div class="max-w-md lg:max-w-4xl xl:max-w-6xl mx-auto px-4 lg:px-8 py-3 lg:py-4">
             <div class="flex items-center justify-center gap-2 lg:gap-4 text-xs lg:text-sm text-gray-500">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-4 h-4 lg:w-6 lg:h-6">

@@ -2,7 +2,7 @@
 @section('content')
 <h1 class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto text-lg font-bold text-[#222] mb-4 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='w-5 h-5 text-[#FF385C] flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 7v10a4 4 0 004 4h10a4 4 0 004-4V7' /><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 3v4M8 3v4M4 11h16' /></svg> Locações</h1>
 <div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto">
-    <div class="bg-white rounded-lg shadow-sm p-4 mb-6 border border-gray-100">
+    <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 mb-6">
         <div class="flex items-center gap-2 mb-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h3.28a2 2 0 011.42.59l1.3 1.3a2 2 0 001.42.59H19a2 2 0 012 2v10a2 2 0 01-2 2z" /></svg>
             <h4 class="font-bold text-base text-[#222]">Lucro Mensal</h4>
@@ -126,7 +126,7 @@
         });
     </script>
     {{-- Seção de Locações --}}
-    <div class="bg-white rounded-lg shadow-sm p-4 mb-6 border border-gray-100">
+    <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 mb-6">
         <div class="flex flex-wrap items-center gap-2 mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a4 4 0 004 4h10a4 4 0 004-4V7" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M4 11h16" /></svg>
             <h2 class="text-lg font-bold text-[#222]">Locações do mês</h2>
@@ -137,13 +137,18 @@
                         <option value="{{ $mesValue }}" @if($periodo == $mesValue) selected @endif>{{ $mesLabel }}</option>
                     @endforeach
                 </select>
-                <button type="submit" class="w-full sm:w-auto px-3 py-2 sm:py-1 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm min-h-[40px]">Filtrar</button>
+                <button type="submit" class="btn-action btn-action-info min-h-[40px]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z" />
+                    </svg> 
+                    Filtrar
+                </button>
             </form>
         </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         @forelse($locacoes as $locacao)
-        <div class="bg-white rounded-lg shadow-sm p-3 flex flex-col gap-1 border border-gray-100 text-base min-w-0">
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-4 mb-4 flex flex-col gap-1 text-base min-w-0">
             <div class="flex items-center gap-2 mb-1">
                 <svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4 text-[#FF385C] flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6' /><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h3.28a2 2 0 011.42.59l1.3 1.3a2 2 0 001.42.59H19a2 2 0 012 2v10a2 2 0 01-2 2z' /></svg>
                 <span class="font-semibold text-lg text-[#222]">{{ $locacao->nome }}</span>
@@ -182,13 +187,29 @@
                     </span>
                 </div>
             </div>
-            <div class="flex gap-2 mt-2">
-                <a href="{{ route('locacoes.show', $locacao->id) }}" class="flex items-center gap-1 px-2 py-1 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium transition shadow-sm"><svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z' /></svg> Detalhes</a>
-                <a href="{{ route('locacoes.edit', $locacao->id) }}" class="flex items-center gap-1 px-2 py-1 rounded bg-yellow-100 text-yellow-800 hover:bg-yellow-200 text-sm font-medium transition shadow-sm"><svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15.232 5.232l3.536 3.536M9 11l6 6M3 21h6a2 2 0 002-2V7a2 2 0 00-2-2H3v8z' /></svg> Editar</a>
-                <form action="{{ route('locacoes.destroy', $locacao->id) }}" method="POST">
+            <div class="flex flex-wrap gap-2 mt-3">
+                <a href="{{ route('locacoes.show', $locacao->id) }}" class="btn-action btn-action-details">
+                    <svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z' />
+                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' />
+                    </svg> 
+                    Ver
+                </a>
+                <a href="{{ route('locacoes.edit', $locacao->id) }}" class="btn-action btn-action-edit">
+                    <svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' />
+                    </svg> 
+                    Editar
+                </a>
+                <form action="{{ route('locacoes.destroy', $locacao->id) }}" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="flex items-center gap-1 px-2 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200 text-sm font-medium transition shadow-sm"><svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12' /></svg> Excluir</button>
+                    <button type="submit" class="btn-action btn-action-delete" onclick="return confirm('Tem certeza que deseja excluir esta locação?')">
+                        <svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+                        </svg> 
+                        Excluir
+                    </button>
                 </form>
             </div>
         </div>
