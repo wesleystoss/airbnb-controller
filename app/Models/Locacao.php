@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Locacao extends Model
 {
     protected $fillable = [
-        'nome', 'valor_total', 'data_inicio', 'data_fim'
+        'nome', 'valor_total', 'data_inicio', 'data_fim', 'imovel_id'
     ];
 
     public function despesas()
@@ -18,5 +18,10 @@ class Locacao extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'locacao_user')->withPivot('papel')->withTimestamps();
+    }
+
+    public function imovel()
+    {
+        return $this->belongsTo(Imovel::class);
     }
 }

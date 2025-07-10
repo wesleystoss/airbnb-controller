@@ -7,6 +7,7 @@ use App\Models\Locacao;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Imovel;
 
 class LocacaoWebController extends Controller
 {
@@ -15,12 +16,12 @@ class LocacaoWebController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $periodo = request('periodo', now()->format('Y-m'));
         
         // Query para locações com filtro por período
-        $query = Auth::user()->locacoes()->with('despesas')->orderBy('data_inicio', 'desc');
+        $query = Auth::user()->locacoes()->with('despesas');
         $query->whereYear('data_inicio', substr($periodo, 0, 4))
               ->whereMonth('data_inicio', substr($periodo, 5, 2));
         
@@ -66,12 +67,14 @@ class LocacaoWebController extends Controller
 
     public function create()
     {
-        return view('locacoes.create');
+        $imoveis = Imovel::where('user_id', auth()->id())->get();
+        return view('locacoes.create', compact('imoveis'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'imovel_id' => 'required|exists:imoveis,id',
             'nome' => 'required|string',
             'valor_total' => 'required|numeric',
             'data_inicio' => 'required|date',
@@ -90,7 +93,7 @@ class LocacaoWebController extends Controller
                 'mensagem' => 'Locação não localizada para este usuário.'
             ], 403);
         }
-        $locacao->load('despesas');
+        $locacao->load('despesas', 'imovel');
         $totalDespesas = $locacao->despesas->sum('valor');
         $coanfitriao = round($locacao->valor_total * 0.3333, 2);
         $saldo = $locacao->valor_total - $coanfitriao - $totalDespesas;

@@ -8,6 +8,15 @@
     <form action="{{ route('locacoes.store') }}" method="POST" class="flex flex-col gap-3">
         @csrf
         <div>
+            <label for="imovel_id" class="block text-xs text-gray-600 mb-1">Imóvel</label>
+            <select id="imovel_id" name="imovel_id" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" required>
+                <option value="">Selecione um imóvel</option>
+                @foreach($imoveis as $imovel)
+                    <option value="{{ $imovel->id }}">{{ $imovel->nome }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
             <label for="nome" class="block text-xs text-gray-600 mb-1">Nome</label>
             <input type="text" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="nome" name="nome" required>
         </div>

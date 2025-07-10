@@ -148,6 +148,9 @@
                 <svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4 text-[#FF385C] flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6' /><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h3.28a2 2 0 011.42.59l1.3 1.3a2 2 0 001.42.59H19a2 2 0 012 2v10a2 2 0 01-2 2z' /></svg>
                 <span class="font-semibold text-lg text-[#222]">{{ $locacao->nome }}</span>
             </div>
+            <div class="text-xs text-gray-500 mb-1">
+                <span class="font-semibold">Imóvel:</span> {{ $locacao->imovel?->nome ?? '-' }}
+            </div>
             @php
                 $coanfitriao = $locacao->valor_total * 0.3333;
                 $totalDespesas = $locacao->despesas->sum('valor');
