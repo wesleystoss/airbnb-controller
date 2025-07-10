@@ -9,8 +9,11 @@
         @csrf
         @method('PUT')
         <div>
-            <label for="nome" class="block text-xs text-gray-600 mb-1">Nome</label>
-            <input type="text" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="nome" name="nome" value="{{ $locacao->nome }}" required>
+            <label for="nome" class="block text-xs text-gray-600 mb-1">Tipo <span class="text-red-500">*</span></label>
+            <select class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="nome" name="nome" required>
+                <option value="Locação" {{ $locacao->nome == 'Locação' ? 'selected' : '' }}>Locação</option>
+                <option value="Extensão" {{ $locacao->nome == 'Extensão' ? 'selected' : '' }}>Extensão</option>
+            </select>
         </div>
         <div>
             <label for="valor_total" class="block text-xs text-gray-600 mb-1">Valor Total</label>
@@ -27,6 +30,10 @@
             <div class="w-1/2">
                 <label for="data_fim" class="block text-xs text-gray-600 mb-1">Data Fim</label>
                 <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_fim" name="data_fim" value="{{ $locacao->data_fim }}" required>
+            </div>
+            <div class="w-1/2">
+                <label for="data_pagamento" class="block text-xs text-gray-600 mb-1">Data de Pagamento</label>
+                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_pagamento" name="data_pagamento" value="{{ $locacao->data_pagamento }}" required>
             </div>
         </div>
         <div class="flex gap-2 mt-2">

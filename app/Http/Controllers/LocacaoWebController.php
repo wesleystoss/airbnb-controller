@@ -23,15 +23,15 @@ class LocacaoWebController extends Controller
         $user = Auth::user();
         // Locações do usuário
         $query = $user->locacoes()->with('despesas', 'imovel');
-        $query->whereYear('data_inicio', substr($periodo, 0, 4))
-              ->whereMonth('data_inicio', substr($periodo, 5, 2));
+        $query->whereYear('data_pagamento', substr($periodo, 0, 4))
+              ->whereMonth('data_pagamento', substr($periodo, 5, 2));
         $locacoesUsuario = $query->get();
         // Locações de imóveis compartilhados
         $imoveisCompartilhadosIds = CompartilhamentoImovel::where('user_compartilhado_id', $user->id)->pluck('imovel_id');
         $locacoesCompartilhadas = \App\Models\Locacao::with('despesas', 'imovel')
             ->whereIn('imovel_id', $imoveisCompartilhadosIds)
-            ->whereYear('data_inicio', substr($periodo, 0, 4))
-            ->whereMonth('data_inicio', substr($periodo, 5, 2))
+            ->whereYear('data_pagamento', substr($periodo, 0, 4))
+            ->whereMonth('data_pagamento', substr($periodo, 5, 2))
             ->get();
         // Unir e remover duplicatas
         $locacoes = $locacoesUsuario->merge($locacoesCompartilhadas)->unique('id');
@@ -41,7 +41,6 @@ class LocacaoWebController extends Controller
                 ->whereIn('imovel_id', $imoveisCompartilhadosIds)
                 ->get()
         )->unique('id');
-        
         // Agrupar por mês/ano e calcular lucro (valor_total - coanfitrião - despesas)
         $resumoMensal = [];
         $resumoAnual = [];
@@ -50,14 +49,14 @@ class LocacaoWebController extends Controller
         $coanfitriaoMensal = [];
         $despesasMensal = [];
         foreach ($todasLocacoes as $locacao) {
-            $mes = Carbon::parse($locacao->data_inicio)->format('m/Y');
-            $ano = Carbon::parse($locacao->data_inicio)->format('Y');
+            $mes = Carbon::parse($locacao->data_pagamento)->format('m/Y');
+            $ano = Carbon::parse($locacao->data_pagamento)->format('Y');
             $coanfitriao = round($locacao->valor_total * 0.3333, 2);
             $despesas = $locacao->despesas->sum('valor');
             $lucro = $locacao->valor_total - $coanfitriao - $despesas;
             $resumoMensal[$mes] = ($resumoMensal[$mes] ?? 0) + $lucro;
             $resumoAnual[$ano] = ($resumoAnual[$ano] ?? 0) + $lucro;
-            $mesesDisponiveis[$mes] = Carbon::parse($locacao->data_inicio)->format('Y-m');
+            $mesesDisponiveis[$mes] = Carbon::parse($locacao->data_pagamento)->format('Y-m');
             $locacoesMensal[$mes] = ($locacoesMensal[$mes] ?? 0) + $locacao->valor_total;
             $coanfitriaoMensal[$mes] = ($coanfitriaoMensal[$mes] ?? 0) + $coanfitriao;
             $despesasMensal[$mes] = ($despesasMensal[$mes] ?? 0) + $despesas;
@@ -89,8 +88,9 @@ class LocacaoWebController extends Controller
             'imovel_id' => 'required|exists:imoveis,id',
             'nome' => 'required|string',
             'valor_total' => 'required|numeric',
-            'data_inicio' => 'required|date',
-            'data_fim' => 'required|date',
+            'data_inicio' => 'nullable|date',
+            'data_fim' => 'nullable|date',
+            'data_pagamento' => 'required|date',
         ]);
         $locacao = Locacao::create($validated);
         $user = Auth::user();
@@ -138,8 +138,9 @@ class LocacaoWebController extends Controller
         $validated = $request->validate([
             'nome' => 'required|string',
             'valor_total' => 'required|numeric',
-            'data_inicio' => 'required|date',
-            'data_fim' => 'required|date',
+            'data_inicio' => 'nullable|date',
+            'data_fim' => 'nullable|date',
+            'data_pagamento' => 'required|date',
         ]);
         $locacao->update($validated);
         return redirect()->route('locacoes.index');

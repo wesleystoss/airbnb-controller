@@ -8,7 +8,7 @@
     <form action="{{ route('locacoes.store') }}" method="POST" class="flex flex-col gap-3">
         @csrf
         <div>
-            <label for="imovel_id" class="block text-xs text-gray-600 mb-1">Imóvel</label>
+            <label for="imovel_id" class="block text-xs text-gray-600 mb-1">Imóvel <span class="text-red-500">*</span></label>
             <select id="imovel_id" name="imovel_id" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" required>
                 <option value="">Selecione um imóvel</option>
                 @foreach($imoveis as $imovel)
@@ -17,11 +17,14 @@
             </select>
         </div>
         <div>
-            <label for="nome" class="block text-xs text-gray-600 mb-1">Nome</label>
-            <input type="text" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="nome" name="nome" required>
+            <label for="nome" class="block text-xs text-gray-600 mb-1">Tipo <span class="text-red-500">*</span></label>
+            <select class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="nome" name="nome" required>
+                <option value="Locação">Locação</option>
+                <option value="Extensão">Extensão</option>
+            </select>
         </div>
         <div>
-            <label for="valor_total" class="block text-xs text-gray-600 mb-1">Valor Total</label>
+            <label for="valor_total" class="block text-xs text-gray-600 mb-1">Valor Total <span class="text-red-500">*</span></label>
             <div class="flex items-center gap-1">
                 <span class="text-gray-500 text-xs">R$</span>
                 <input type="number" step="0.01" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="valor_total" name="valor_total" required>
@@ -30,11 +33,15 @@
         <div class="flex gap-2">
             <div class="w-1/2">
                 <label for="data_inicio" class="block text-xs text-gray-600 mb-1">Data Início</label>
-                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_inicio" name="data_inicio" required>
+                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_inicio" name="data_inicio">
             </div>
             <div class="w-1/2">
                 <label for="data_fim" class="block text-xs text-gray-600 mb-1">Data Fim</label>
-                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_fim" name="data_fim" required>
+                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_fim" name="data_fim">
+            </div>
+            <div class="w-1/2">
+                <label for="data_pagamento" class="block text-xs text-gray-600 mb-1">Data de Pagamento <span class="text-red-500">*</span></label>
+                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_pagamento" name="data_pagamento" required>
             </div>
         </div>
         <div class="flex gap-2 mt-2">

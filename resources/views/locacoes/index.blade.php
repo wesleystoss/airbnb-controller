@@ -159,25 +159,28 @@
             <div class="flex flex-wrap gap-2 text-sm text-gray-500 mb-1">
                 <span class="inline-flex items-center gap-1">
                     <svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z' /></svg>
-                    {{ \Carbon\Carbon::parse($locacao->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($locacao->data_fim)->format('d/m/Y') }}
+                    {{ $locacao->data_inicio ? \Carbon\Carbon::parse($locacao->data_inicio)->format('d/m/Y') : '-' }} a {{ $locacao->data_fim ? \Carbon\Carbon::parse($locacao->data_fim)->format('d/m/Y') : '-' }}
                 </span>
                 <span class="inline-flex items-center gap-1">
                     <svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z' /></svg>
                     Valor: <span class="font-semibold text-[#222]">R$ {{ number_format($locacao->valor_total, 2, ',', '.') }}</span>
                     <span class="mx-1">|</span>
-                    Dias: <span class="font-semibold text-[#222]">{{ \Carbon\Carbon::parse($locacao->data_inicio)->diffInDays(\Carbon\Carbon::parse($locacao->data_fim)) + 1 }}</span>
+                    Dias: <span class="font-semibold text-[#222]">{{ $locacao->data_inicio && $locacao->data_fim ? \Carbon\Carbon::parse($locacao->data_inicio)->diffInDays(\Carbon\Carbon::parse($locacao->data_fim)) + 1 : '-' }}</span>
                     <span class="mx-1">|</span>
-                    Diária: <span class="font-semibold text-[#222]">R$ {{ number_format($locacao->valor_total / (\Carbon\Carbon::parse($locacao->data_inicio)->diffInDays(\Carbon\Carbon::parse($locacao->data_fim)) + 1), 2, ',', '.') }}</span>
+                    Diária: <span class="font-semibold text-[#222]">R$ {{ $locacao->data_inicio && $locacao->data_fim ? number_format($locacao->valor_total / (\Carbon\Carbon::parse($locacao->data_inicio)->diffInDays(\Carbon\Carbon::parse($locacao->data_fim)) + 1), 2, ',', '.') : '-' }}</span>
                 </span>
-                <span class="inline-flex items-center gap-1 bg-yellow-50 border border-yellow-100 rounded px-2 py-0.5 text-yellow-700 font-semibold">
-                    🤝 Co-anfitrião: R$ {{ number_format($coanfitriao, 2, ',', '.') }}
-                </span>
-            </div>
-            <div class="flex flex-wrap gap-2 text-sm">
-                <span class="inline-flex items-center gap-1 text-gray-700">
+                <span class="inline-flex items-center gap-1">
                     <svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z' /></svg>
-                    Saldo final: <span class="font-bold {{ $saldoFinal < 0 ? 'text-red-500' : 'text-green-600' }}">R$ {{ number_format($saldoFinal, 2, ',', '.') }}</span>
+                    Pagamento: <span class="font-semibold text-[#222]">{{ $locacao->data_pagamento ? \Carbon\Carbon::parse($locacao->data_pagamento)->format('d/m/Y') : '-' }}</span>
                 </span>
+                <div class="flex flex-col sm:flex-row gap-2 w-full">
+                    <span class="inline-flex items-center gap-1 bg-yellow-50 border border-yellow-100 rounded px-2 py-0.5 text-yellow-700 font-semibold">
+                        🤝 Co-anfitrião: R$ {{ number_format($coanfitriao, 2, ',', '.') }}
+                    </span>
+                    <span class="inline-flex items-center gap-1 bg-green-50 border border-green-100 rounded px-2 py-0.5 font-semibold {{ $saldoFinal < 0 ? 'bg-red-50 border-red-100 text-red-700' : 'text-green-700' }}">
+                        💰 Saldo final: R$ {{ number_format($saldoFinal, 2, ',', '.') }}
+                    </span>
+                </div>
             </div>
             <div class="flex gap-2 mt-2">
                 <a href="{{ route('locacoes.show', $locacao->id) }}" class="flex items-center gap-1 px-2 py-1 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium transition shadow-sm"><svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z' /></svg> Detalhes</a>

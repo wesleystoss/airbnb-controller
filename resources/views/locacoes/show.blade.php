@@ -9,7 +9,8 @@
         <div>
             <span class="text-gray-500">Imóvel:</span> <span class="font-semibold">{{ $locacao->imovel?->nome ?? '-' }}</span><br>
             <span class="text-gray-500">Nome:</span> <span class="font-semibold">{{ $locacao->nome }}</span><br>
-            <span class="text-gray-500">Período:</span> <span class="inline-flex items-center gap-1"><svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' /></svg> {{ \Carbon\Carbon::parse($locacao->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($locacao->data_fim)->format('d/m/Y') }}</span>
+            <span class="text-gray-500">Período:</span> <span class="inline-flex items-center gap-1"><svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' /></svg> {{ \Carbon\Carbon::parse($locacao->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($locacao->data_fim)->format('d/m/Y') }}</span><br>
+            <span class="text-gray-500">Data de Pagamento:</span> <span class="font-semibold">{{ $locacao->data_pagamento ? \Carbon\Carbon::parse($locacao->data_pagamento)->format('d/m/Y') : '-' }}</span>
         </div>
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded px-2 py-1">
