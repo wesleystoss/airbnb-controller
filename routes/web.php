@@ -13,7 +13,7 @@ use App\Http\Controllers\ImovelController;
 //     return view('welcome');
 // });
 
-Route::get('/', [LocacaoWebController::class, 'index'])->name('home');
+Route::get('/', [LocacaoWebController::class, 'home'])->name('home');
 
 // Locações
 Route::get('/locacoes', [LocacaoWebController::class, 'index'])->name('locacoes.index');

@@ -13,7 +13,7 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         if (Auth::check()) {
-            return redirect()->route('locacoes.index');
+            return redirect()->route('home');
         }
         return view('auth.register');
     }
@@ -33,6 +33,6 @@ class RegisterController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->route('locacoes.index');
+        return redirect()->route('home');
     }
 } 

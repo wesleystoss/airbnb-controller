@@ -33,7 +33,7 @@ class GoogleController extends Controller
             ]);
         }
         Auth::login($user, true);
-        return redirect()->route('locacoes.index');
+        return redirect()->route('home');
     }
 
     public function mobileLogin(Request $request)
@@ -65,6 +65,6 @@ class GoogleController extends Controller
             ]);
         }
         \Illuminate\Support\Facades\Auth::login($user, true);
-        return redirect()->route('locacoes.index');
+        return redirect()->route('home');
     }
 } 
