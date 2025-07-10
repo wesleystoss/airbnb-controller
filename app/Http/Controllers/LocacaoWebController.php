@@ -17,6 +17,188 @@ class LocacaoWebController extends Controller
         $this->middleware('auth');
     }
 
+    public function home(Request $request)
+    {
+        $user = Auth::user();
+        
+        // Locações do usuário
+        $locacoesUsuario = $user->locacoes()->with('despesas')->get();
+        
+        // Locações de imóveis compartilhados
+        $imoveisCompartilhadosIds = CompartilhamentoImovel::where('user_compartilhado_id', $user->id)->pluck('imovel_id');
+        $locacoesCompartilhadas = \App\Models\Locacao::with('despesas')
+            ->whereIn('imovel_id', $imoveisCompartilhadosIds)
+            ->get();
+        
+        // Unir e remover duplicatas
+        $todasLocacoes = $locacoesUsuario->merge($locacoesCompartilhadas)->unique('id');
+
+        // Estatísticas gerais
+        $totalLocacoes = $todasLocacoes->count();
+        $locacoesAtivas = $todasLocacoes->where('status', 'ativa')->count();
+        $totalDespesas = $todasLocacoes->sum(function($locacao) {
+            return $locacao->despesas->sum('valor');
+        });
+        $totalReceitas = $todasLocacoes->sum('valor_total');
+        $totalCoanfitriao = $todasLocacoes->sum(function($locacao) {
+            return round($locacao->valor_total * 0.3333, 2);
+        });
+        $lucroTotal = $totalReceitas - $totalCoanfitriao - $totalDespesas;
+
+        // Dados dos últimos 6 meses para análise
+        $ultimos6Meses = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $data = now()->subMonths($i);
+            $mes = $data->format('m/Y');
+            $locacoesMes = $todasLocacoes->filter(function($locacao) use ($data) {
+                return Carbon::parse($locacao->data_pagamento)->format('Y-m') === $data->format('Y-m');
+            });
+            
+            $receitasMes = $locacoesMes->sum('valor_total');
+            $coanfitriaoMes = $locacoesMes->sum(function($locacao) {
+                return round($locacao->valor_total * 0.3333, 2);
+            });
+            $despesasMes = $locacoesMes->sum(function($locacao) {
+                return $locacao->despesas->sum('valor');
+            });
+            $lucroMes = $receitasMes - $coanfitriaoMes - $despesasMes;
+            
+            $ultimos6Meses[$mes] = [
+                'receitas' => $receitasMes,
+                'coanfitriao' => $coanfitriaoMes,
+                'despesas' => $despesasMes,
+                'lucro' => $lucroMes,
+                'quantidade' => $locacoesMes->count()
+            ];
+        }
+
+        // Análises avançadas
+        $analises = [];
+        
+        // Melhor e pior mês
+        $melhorMes = null;
+        $piorMes = null;
+        $melhorLucro = -999999;
+        $piorLucro = 999999;
+        
+        foreach ($ultimos6Meses as $mes => $dados) {
+            if ($dados['lucro'] > $melhorLucro) {
+                $melhorLucro = $dados['lucro'];
+                $melhorMes = $mes;
+            }
+            if ($dados['lucro'] < $piorLucro) {
+                $piorLucro = $dados['lucro'];
+                $piorMes = $mes;
+            }
+        }
+        
+        $analises['melhor_mes'] = [
+            'mes' => $melhorMes,
+            'lucro' => $melhorLucro,
+            'receitas' => $ultimos6Meses[$melhorMes]['receitas'] ?? 0,
+            'despesas' => $ultimos6Meses[$melhorMes]['despesas'] ?? 0
+        ];
+        
+        $analises['pior_mes'] = [
+            'mes' => $piorMes,
+            'lucro' => $piorLucro,
+            'receitas' => $ultimos6Meses[$piorMes]['receitas'] ?? 0,
+            'despesas' => $ultimos6Meses[$piorMes]['despesas'] ?? 0
+        ];
+        
+        // Análise de tendência (últimos 3 meses vs 3 meses anteriores)
+        $ultimos3Meses = array_slice($ultimos6Meses, -3);
+        $anteriores3Meses = array_slice($ultimos6Meses, 0, 3);
+        
+        $mediaLucroUltimos3 = array_sum(array_column($ultimos3Meses, 'lucro')) / count($ultimos3Meses);
+        $mediaLucroAnteriores3 = array_sum(array_column($anteriores3Meses, 'lucro')) / count($anteriores3Meses);
+        
+        $tendencia = $mediaLucroUltimos3 - $mediaLucroAnteriores3;
+        $tendenciaPercentual = $mediaLucroAnteriores3 != 0 ? (($tendencia / $mediaLucroAnteriores3) * 100) : 0;
+        
+        $analises['tendencia'] = [
+            'valor' => $tendencia,
+            'percentual' => $tendenciaPercentual,
+            'direcao' => $tendencia > 0 ? 'crescimento' : ($tendencia < 0 ? 'queda' : 'estavel'),
+            'media_ultimos_3' => $mediaLucroUltimos3,
+            'media_anteriores_3' => $mediaLucroAnteriores3
+        ];
+        
+        // Análise de rentabilidade
+        $rentabilidadeTotal = $totalReceitas > 0 ? (($lucroTotal / $totalReceitas) * 100) : 0;
+        $rentabilidadeMedia = 0;
+        $mesesComReceita = 0;
+        
+        foreach ($ultimos6Meses as $dados) {
+            if ($dados['receitas'] > 0) {
+                $rentabilidadeMes = (($dados['lucro'] / $dados['receitas']) * 100);
+                $rentabilidadeMedia += $rentabilidadeMes;
+                $mesesComReceita++;
+            }
+        }
+        
+        $rentabilidadeMedia = $mesesComReceita > 0 ? $rentabilidadeMedia / $mesesComReceita : 0;
+        
+        $analises['rentabilidade'] = [
+            'total' => $rentabilidadeTotal,
+            'media_mensal' => $rentabilidadeMedia,
+            'meses_analisados' => $mesesComReceita
+        ];
+
+        // Dados para o gráfico comparativo mensal (mesmo que o método index)
+        $resumoMensal = [];
+        $resumoAnual = [];
+        $mesesDisponiveis = [];
+        $locacoesMensal = [];
+        $coanfitriaoMensal = [];
+        $despesasMensal = [];
+        
+        foreach ($todasLocacoes as $locacao) {
+            $mes = Carbon::parse($locacao->data_pagamento)->format('m/Y');
+            $ano = Carbon::parse($locacao->data_pagamento)->format('Y');
+            $coanfitriao = round($locacao->valor_total * 0.3333, 2);
+            $despesas = $locacao->despesas->sum('valor');
+            $lucro = $locacao->valor_total - $coanfitriao - $despesas;
+            $resumoMensal[$mes] = ($resumoMensal[$mes] ?? 0) + $lucro;
+            $resumoAnual[$ano] = ($resumoAnual[$ano] ?? 0) + $lucro;
+            $mesesDisponiveis[$mes] = Carbon::parse($locacao->data_pagamento)->format('Y-m');
+            $locacoesMensal[$mes] = ($locacoesMensal[$mes] ?? 0) + $locacao->valor_total;
+            $coanfitriaoMensal[$mes] = ($coanfitriaoMensal[$mes] ?? 0) + $coanfitriao;
+            $despesasMensal[$mes] = ($despesasMensal[$mes] ?? 0) + $despesas;
+        }
+        
+        // Garante que todos os meses presentes no resumoMensal estejam em todos os arrays
+        foreach (array_keys($resumoMensal) as $mes) {
+            $locacoesMensal[$mes] = $locacoesMensal[$mes] ?? 0;
+            $coanfitriaoMensal[$mes] = $coanfitriaoMensal[$mes] ?? 0;
+            $despesasMensal[$mes] = $despesasMensal[$mes] ?? 0;
+        }
+        
+        ksort($resumoMensal);
+        ksort($resumoAnual);
+        krsort($mesesDisponiveis);
+        ksort($locacoesMensal);
+        ksort($coanfitriaoMensal);
+        ksort($despesasMensal);
+
+        return view('welcome', compact(
+            'totalLocacoes',
+            'locacoesAtivas', 
+            'totalDespesas',
+            'totalReceitas',
+            'totalCoanfitriao',
+            'lucroTotal',
+            'ultimos6Meses',
+            'analises',
+            'resumoMensal',
+            'resumoAnual',
+            'mesesDisponiveis',
+            'locacoesMensal',
+            'coanfitriaoMensal',
+            'despesasMensal'
+        ));
+    }
+
     public function index(Request $request)
     {
         $periodo = request('periodo', now()->format('Y-m'));
