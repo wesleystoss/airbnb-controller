@@ -88,8 +88,8 @@ class LocacaoWebController extends Controller
             'imovel_id' => 'required|exists:imoveis,id',
             'nome' => 'required|string',
             'valor_total' => 'required|numeric',
-            'data_inicio' => 'required|date',
-            'data_fim' => 'required|date',
+            'data_inicio' => 'nullable|date',
+            'data_fim' => 'nullable|date',
             'data_pagamento' => 'required|date',
         ]);
         $locacao = Locacao::create($validated);
@@ -138,8 +138,8 @@ class LocacaoWebController extends Controller
         $validated = $request->validate([
             'nome' => 'required|string',
             'valor_total' => 'required|numeric',
-            'data_inicio' => 'required|date',
-            'data_fim' => 'required|date',
+            'data_inicio' => 'nullable|date',
+            'data_fim' => 'nullable|date',
             'data_pagamento' => 'required|date',
         ]);
         $locacao->update($validated);
