@@ -78,12 +78,12 @@
             
             <!-- Conteúdo Principal -->
             <main class="pt-20 pb-20 flex-1 mt-16 lg:mt-20 mb-20 lg:mb-24">
-                <div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto">
+                <div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto" x-data="{ show: false }" x-init="setTimeout(() => show = true, 10)">
                 @auth
                     <!-- Dashboard para usuários logados -->
-                    <div class="spacing-responsive-lg">
+                    <div class="spacing-responsive-lg" x-show="show" x-transition.opacity.duration.700ms>
                         <!-- Boas-vindas -->
-                        <div class="card fade-in">
+                        <div class="card" x-transition.opacity.duration.700ms x-transition:enter-start="-translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
                             <div class="flex items-center gap-4 lg:gap-6">
                                 <div class="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-r from-[#FF385C] to-[#e11d48] rounded-full flex items-center justify-center">
                                     <span class="text-white text-lg lg:text-2xl font-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
@@ -96,7 +96,7 @@
                         </div>
 
                         <!-- Cards de Ação -->
-                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 slide-up" style="animation-delay: 0.1s;">
+                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6" x-transition.opacity.duration.700ms x-transition:enter-start="-translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100" style="animation-delay: 0.1s;">
                             <a href="{{ route('locacoes.create') }}" class="card card-hover text-center">
                                 <div class="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
                                     <svg class="w-6 h-6 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,7 +129,7 @@
                         </div>
 
                         <!-- Tabs de Análise -->
-                        <div class="card slide-up" style="animation-delay: 0.2s;" x-data="{ activeTab: 'resumo' }">
+                        <div class="card" x-data="{ activeTab: 'resumo' }" x-transition.opacity.duration.700ms x-transition:enter-start="-translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100" style="animation-delay: 0.2s;">
                             <!-- Navegação das Tabs -->
                             <div class="flex border-b border-gray-200 mb-6">
                                 <button @click="activeTab = 'resumo'" 
