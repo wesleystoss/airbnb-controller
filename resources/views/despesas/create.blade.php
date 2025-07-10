@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-<div class="bg-white rounded-lg shadow-sm p-4 max-w-md mx-auto border border-gray-100 max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto">
+<div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 mb-6 max-w-md mx-auto max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto">
     <div class="flex items-center gap-2 mb-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
         <h2 class="text-lg font-bold text-[#222]">Nova Despesa para {{ $locacao->nome }}</h2>
@@ -31,21 +31,21 @@
         </div>
 
         <div class="flex gap-2 mt-2">
-            <button type="submit" class="flex items-center gap-1 px-4 py-2 rounded bg-[#FF385C] text-white text-xs font-medium hover:bg-[#e11d48] transition shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button type="submit" class="btn-action btn-action-success">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg> 
                 Salvar
             </button>
-            <button type="submit" name="criar_e_continuar" value="1" style="background-color: #059669; color: white; border: 1px solid #047857; border-radius: 0.375rem; padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 500; display: flex; align-items: center; gap: 0.25rem; transition: background-color 0.2s; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);" onmouseover="this.style.backgroundColor='#047857'" onmouseout="this.style.backgroundColor='#059669'">
-                <svg xmlns="http://www.w3.org/2000/svg" style="width: 1rem; height: 1rem; flex-shrink: 0; color: white;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button type="submit" name="criar_e_continuar" value="1" class="btn-action btn-action-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
                 </svg> 
-                <span style="color: white; font-weight: 500;">Criar e Continuar</span>
+                Criar e Continuar
             </button>
-            <a href="{{ route('locacoes.show', $locacao->id) }}" class="flex items-center gap-1 px-4 py-2 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200 transition shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <a href="{{ route('locacoes.show', $locacao->id) }}" class="btn-action btn-action-details">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg> 
                 Cancelar

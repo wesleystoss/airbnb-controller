@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
 <div class="max-w-xl mx-auto">
-    <div class="bg-white rounded-lg shadow p-6 border border-gray-100 mb-4">
+    <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 mb-6">
         <div class="flex items-center gap-3 mb-6">
             <div class="w-12 h-12 bg-[#FF385C] rounded-full flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -53,7 +53,7 @@
                                class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-[#FF385C] focus:border-transparent">
                     </div>
                     <div class="flex gap-3 mt-6">
-                        <button type="submit" class="flex items-center gap-2 px-4 py-2 bg-[#FF385C] text-white rounded-lg font-medium hover:bg-[#e11d48] transition shadow-sm">
+                        <button type="submit" class="btn-action btn-action-success">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
@@ -86,11 +86,11 @@
                                class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-[#FF385C] focus:border-transparent" required>
                     </div>
                     <div class="flex gap-3 mt-6">
-                        <button type="submit" style="background-color: #2563eb; color: white; border: 1px solid #1d4ed8; border-radius: 0.5rem; padding: 0.5rem 1rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);" onmouseover="this.style.backgroundColor='#1d4ed8'" onmouseout="this.style.backgroundColor='#2563eb'">
-                            <svg xmlns="http://www.w3.org/2000/svg" style="width: 1rem; height: 1rem; color: white;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <button type="submit" class="btn-action btn-action-info">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
-                            <span style="color: white; font-weight: 500;">Alterar Senha</span>
+                            Alterar Senha
                         </button>
                     </div>
                 </form>
@@ -98,14 +98,14 @@
 
             <!-- Ações -->
             <div class="flex flex-col sm:flex-row gap-3 mt-8">
-                <a href="{{ route('profile.show') }}" class="flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('profile.show') }}" class="btn-action btn-action-details">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                     Voltar ao Perfil
                 </a>
-                <a href="{{ route('locacoes.index') }}" class="flex items-center justify-center gap-2 px-6 py-3 bg-[#FF385C] text-white rounded-lg font-medium hover:bg-[#e11d48] transition shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('locacoes.index') }}" class="btn-action btn-action-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                     Ir para Locações

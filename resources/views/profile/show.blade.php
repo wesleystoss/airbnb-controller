@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
 <div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto">
-    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+    <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 mb-6">
         <div class="flex items-center gap-3 mb-6">
             <div class="w-12 h-12 bg-[#FF385C] rounded-full flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,14 +86,14 @@
 
             <!-- Ações -->
             <div class="flex flex-col sm:flex-row gap-3">
-                <a href="{{ route('profile.edit') }}" class="flex items-center justify-center gap-2 px-6 py-3 bg-[#FF385C] text-white rounded-lg font-medium hover:bg-[#e11d48] transition shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('profile.edit') }}" class="btn-action btn-action-edit">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6 6M3 21h6a2 2 0 002-2v-6a2 2 0 00-2-2H3v8z" />
                     </svg>
                     Editar Perfil
                 </a>
-                <a href="{{ route('locacoes.index') }}" class="flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <a href="{{ route('locacoes.index') }}" class="btn-action btn-action-details">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                     Voltar
