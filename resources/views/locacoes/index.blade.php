@@ -194,7 +194,7 @@
         @endforelse
     </div>
     <div class="mt-6">
-        {{ $locacoes->links() }}
+        {{-- {{ $locacoes->links() }} --}}
     </div>
 </div>
 @endsection 

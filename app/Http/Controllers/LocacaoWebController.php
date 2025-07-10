@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Imovel;
+use App\Models\CompartilhamentoImovel;
 
 class LocacaoWebController extends Controller
 {
@@ -19,16 +20,27 @@ class LocacaoWebController extends Controller
     public function index(Request $request)
     {
         $periodo = request('periodo', now()->format('Y-m'));
-        
-        // Query para locações com filtro por período
-        $query = Auth::user()->locacoes()->with('despesas');
+        $user = Auth::user();
+        // Locações do usuário
+        $query = $user->locacoes()->with('despesas', 'imovel');
         $query->whereYear('data_inicio', substr($periodo, 0, 4))
               ->whereMonth('data_inicio', substr($periodo, 5, 2));
-        
-        $locacoes = $query->paginate(10)->withQueryString();
-        
-        // Query separada para calcular resumos (todas as locações do usuário, sem paginação)
-        $todasLocacoes = Auth::user()->locacoes()->with('despesas')->get();
+        $locacoesUsuario = $query->get();
+        // Locações de imóveis compartilhados
+        $imoveisCompartilhadosIds = CompartilhamentoImovel::where('user_compartilhado_id', $user->id)->pluck('imovel_id');
+        $locacoesCompartilhadas = \App\Models\Locacao::with('despesas', 'imovel')
+            ->whereIn('imovel_id', $imoveisCompartilhadosIds)
+            ->whereYear('data_inicio', substr($periodo, 0, 4))
+            ->whereMonth('data_inicio', substr($periodo, 5, 2))
+            ->get();
+        // Unir e remover duplicatas
+        $locacoes = $locacoesUsuario->merge($locacoesCompartilhadas)->unique('id');
+        // Resumos
+        $todasLocacoes = $user->locacoes()->with('despesas')->get()->merge(
+            \App\Models\Locacao::with('despesas')
+                ->whereIn('imovel_id', $imoveisCompartilhadosIds)
+                ->get()
+        )->unique('id');
         
         // Agrupar por mês/ano e calcular lucro (valor_total - coanfitrião - despesas)
         $resumoMensal = [];
@@ -88,9 +100,12 @@ class LocacaoWebController extends Controller
 
     public function show(Locacao $locacao)
     {
-        if (!Auth::user()->locacoes()->where('locacao_id', $locacao->id)->exists()) {
+        $user = Auth::user();
+        $isDono = $locacao->imovel && $locacao->imovel->user_id === $user->id;
+        $isCompartilhado = $locacao->imovel && CompartilhamentoImovel::where('imovel_id', $locacao->imovel->id)->where('user_compartilhado_id', $user->id)->exists();
+        if (!$isDono && !$isCompartilhado) {
             return response()->view('locacoes.nao-autorizado', [
-                'mensagem' => 'Locação não localizada para este usuário.'
+                'mensagem' => 'Você não tem permissão para visualizar esta locação.'
             ], 403);
         }
         $locacao->load('despesas', 'imovel');
@@ -107,6 +122,14 @@ class LocacaoWebController extends Controller
 
     public function edit(Locacao $locacao)
     {
+        $user = Auth::user();
+        $isDono = $locacao->imovel && $locacao->imovel->user_id === $user->id;
+        $isCompartilhado = $locacao->imovel && CompartilhamentoImovel::where('imovel_id', $locacao->imovel->id)->where('user_compartilhado_id', $user->id)->exists();
+        if (!$isDono && !$isCompartilhado) {
+            return response()->view('locacoes.nao-autorizado', [
+                'mensagem' => 'Você não tem permissão para editar esta locação.'
+            ], 403);
+        }
         return view('locacoes.edit', compact('locacao'));
     }
 
