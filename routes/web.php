@@ -51,4 +51,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('imoveis', ImovelController::class)
         ->parameters(['imoveis' => 'imovel'])
         ->except(['show', 'create', 'edit']);
+    Route::post('imoveis/{imovel}/compartilhar', [ImovelController::class, 'adicionarCompartilhamento'])->name('imoveis.compartilhamento.adicionar');
+    Route::delete('imoveis/compartilhar/{compartilhamento}', [ImovelController::class, 'removerCompartilhamento'])->name('imoveis.compartilhamento.remover');
 });

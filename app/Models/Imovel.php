@@ -16,4 +16,9 @@ class Imovel extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function compartilhamentos()
+    {
+        return $this->hasMany(CompartilhamentoImovel::class, 'imovel_id');
+    }
 }

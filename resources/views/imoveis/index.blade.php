@@ -5,6 +5,8 @@
     showEdit: false,
     editId: null,
     editNome: '',
+    showShare: null,
+    shareEmail: '',
     openEditModal(id, nome) {
         this.editId = id;
         this.editNome = nome;
@@ -22,6 +24,10 @@
                 <label for="nome" class="block text-gray-700 font-semibold mb-2">Nome do Imóvel</label>
                 <input type="text" id="nome" name="nome" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF385C]" placeholder="Ex: Casa de Praia" required/>
             </div>
+            <div class="mb-4">
+                <label for="email_compartilhado" class="block text-gray-700 font-semibold mb-2">Compartilhar com (e-mails, separados por vírgula)</label>
+                <input type="text" id="email_compartilhado" name="email_compartilhado" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF385C]" placeholder="Digite um ou mais e-mails separados por vírgula" />
+            </div>
             <button type="submit" class="px-6 py-2 bg-gradient-to-r from-[#FF385C] to-[#e11d48] text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 btn-press">Cadastrar</button>
         </form>
     </div>
@@ -34,6 +40,8 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compartilhado com</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ajustar compartilhamento</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -48,6 +56,43 @@
                                     @method('DELETE')
                                     <button type="submit" class="px-3 py-1 bg-red-100 text-red-700 rounded-full font-semibold shadow-sm hover:bg-red-200 transition-all duration-200">Excluir</button>
                                 </form>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-xs">
+                                @if($imovel->compartilhamentos->isEmpty())
+                                    <span class="text-gray-400">-</span>
+                                @else
+                                    @foreach($imovel->compartilhamentos as $comp)
+                                        <span class="inline-block bg-blue-50 text-blue-700 rounded-full px-2 py-1 mr-1 mb-1">{{ $comp->usuarioCompartilhado->email }}</span>
+                                    @endforeach
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-xs">
+                                <button type="button" @click="showShare = {{ $imovel->id }}; shareEmail = '';" class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full font-semibold shadow-sm hover:bg-purple-200 transition-all duration-200">Ajustar</button>
+                                <div x-show="showShare === {{ $imovel->id }}" style="display:none;" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
+                                    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative">
+                                        <button @click="showShare = null" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+                                        <h2 class="text-xl font-bold mb-4 text-[#FF385C]">Compartilhamento de Imóvel</h2>
+                                        <div class="mb-4">
+                                            <div class="mb-2 font-semibold text-sm">Usuários compartilhados:</div>
+                                            @foreach($imovel->compartilhamentos as $comp)
+                                                <form action="{{ route('imoveis.compartilhamento.remover', $comp->id) }}" method="POST" class="inline-block mr-2 mb-2">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <span class="inline-block bg-blue-50 text-blue-700 rounded-full px-2 py-1">{{ $comp->usuarioCompartilhado->email }}</span>
+                                                    <button type="submit" class="ml-1 text-red-500 hover:text-red-700 font-bold">&times;</button>
+                                                </form>
+                                            @endforeach
+                                            @if($imovel->compartilhamentos->isEmpty())
+                                                <span class="text-gray-400">Nenhum compartilhamento</span>
+                                            @endif
+                                        </div>
+                                        <form action="{{ route('imoveis.compartilhamento.adicionar', $imovel->id) }}" method="POST" class="flex gap-2 items-center">
+                                            @csrf
+                                            <input type="text" name="email" x-model="shareEmail" placeholder="Novo e-mail para compartilhar" class="flex-1 px-3 py-2 border rounded focus:ring-2 focus:ring-[#FF385C]" required />
+                                            <button type="submit" class="px-4 py-2 bg-gradient-to-r from-[#FF385C] to-[#e11d48] text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all">Adicionar</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -79,3 +124,23 @@
     </div>
 </div>
 @endsection 
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('imoveisPage', () => ({
+            showEdit: false,
+            editId: null,
+            editNome: '',
+            showShare: null,
+            shareEmail: '',
+            openEditModal(id, nome) {
+                this.editId = id;
+                this.editNome = nome;
+                this.showEdit = true;
+                this.$nextTick(() => {
+                    this.$refs.editForm.action = `/imoveis/${id}`;
+                });
+            }
+        }))
+    })
+</script> 
