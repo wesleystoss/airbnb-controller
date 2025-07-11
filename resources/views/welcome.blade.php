@@ -11,7 +11,7 @@
         @endif
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
-    <body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen">
+    <body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen p-4">
         <div class="min-h-screen flex flex-col">
             <!-- Header Mobile-First -->
             <header class="w-full bg-white/80 backdrop-blur-md border-b border-gray-200/50 fixed top-0 left-0 z-50 px-4">
@@ -77,7 +77,7 @@
             </header>
             
             <!-- Conteúdo Principal -->
-            <main class="pt-20 pb-20 flex-1 mt-16 lg:mt-20 mb-20 lg:mb-24">
+            <main class="pt-3 pb-20 flex-1 mt-16 lg:mt-20 mb-16 lg:mb-16">
                 <div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto" x-data="{ show: false }" x-init="setTimeout(() => show = true, 10)">
                 @auth
                     <!-- Dashboard para usuários logados -->
