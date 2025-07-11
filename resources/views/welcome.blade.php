@@ -77,7 +77,7 @@
             </header>
             
             <!-- Conteúdo Principal -->
-            <main class="pt-3 pb-20 flex-1 mt-16 lg:mt-20 mb-16 lg:mb-16">
+            <main class="pt-3 lg:pt-10 pb-20 flex-1 mt-16 lg:mt-20 mb-16 lg:mb-16">
                 <div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto" x-data="{ show: false }" x-init="setTimeout(() => show = true, 10)">
                 @auth
                     <!-- Dashboard para usuários logados -->
