@@ -51,7 +51,7 @@ Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->n
 Route::middleware(['auth'])->group(function () {
     Route::resource('imoveis', ImovelController::class)
         ->parameters(['imoveis' => 'imovel'])
-        ->except(['show', 'create', 'edit']);
+        ->except(['show']);
     Route::post('imoveis/{imovel}/compartilhar', [ImovelController::class, 'adicionarCompartilhamento'])->name('imoveis.compartilhamento.adicionar');
     Route::delete('imoveis/compartilhar/{compartilhamento}', [ImovelController::class, 'removerCompartilhamento'])->name('imoveis.compartilhamento.remover');
     

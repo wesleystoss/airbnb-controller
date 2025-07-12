@@ -13,14 +13,31 @@ class CalendarController extends Controller
 {
     public function index()
     {
-        $imoveis = Imovel::where('user_id', auth()->id())->get();
+        $user = auth()->user();
+        
+        // Imóveis próprios
+        $imoveisProprios = Imovel::where('user_id', $user->id)->get();
+        
+        // Imóveis compartilhados
+        $imoveisCompartilhadosIds = \App\Models\CompartilhamentoImovel::where('user_compartilhado_id', $user->id)->pluck('imovel_id');
+        $imoveisCompartilhados = Imovel::whereIn('id', $imoveisCompartilhadosIds)->get();
+        
+        // Unir e remover duplicatas
+        $imoveis = $imoveisProprios->merge($imoveisCompartilhados)->unique('id');
+        
         return view('calendar.index', compact('imoveis'));
     }
 
     public function show(Imovel $imovel)
     {
-        // Verificar se o usuário tem acesso ao imóvel
-        if ($imovel->user_id !== auth()->id()) {
+        // Verificar se o usuário tem acesso ao imóvel (próprio ou compartilhado)
+        $user = auth()->user();
+        $isDono = $imovel->user_id === $user->id;
+        $isCompartilhado = \App\Models\CompartilhamentoImovel::where('imovel_id', $imovel->id)
+            ->where('user_compartilhado_id', $user->id)
+            ->exists();
+            
+        if (!$isDono && !$isCompartilhado) {
             abort(403, 'Acesso negado');
         }
 
@@ -39,8 +56,14 @@ class CalendarController extends Controller
 
     public function updateIcalUrl(Request $request, Imovel $imovel)
     {
-        // Verificar se o usuário tem acesso ao imóvel
-        if ($imovel->user_id !== auth()->id()) {
+        // Verificar se o usuário tem acesso ao imóvel (próprio ou compartilhado)
+        $user = auth()->user();
+        $isDono = $imovel->user_id === $user->id;
+        $isCompartilhado = \App\Models\CompartilhamentoImovel::where('imovel_id', $imovel->id)
+            ->where('user_compartilhado_id', $user->id)
+            ->exists();
+            
+        if (!$isDono && !$isCompartilhado) {
             abort(403, 'Acesso negado');
         }
 
@@ -60,8 +83,14 @@ class CalendarController extends Controller
 
     public function syncCalendar(Imovel $imovel)
     {
-        // Verificar se o usuário tem acesso ao imóvel
-        if ($imovel->user_id !== auth()->id()) {
+        // Verificar se o usuário tem acesso ao imóvel (próprio ou compartilhado)
+        $user = auth()->user();
+        $isDono = $imovel->user_id === $user->id;
+        $isCompartilhado = \App\Models\CompartilhamentoImovel::where('imovel_id', $imovel->id)
+            ->where('user_compartilhado_id', $user->id)
+            ->exists();
+            
+        if (!$isDono && !$isCompartilhado) {
             abort(403, 'Acesso negado');
         }
 

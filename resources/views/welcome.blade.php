@@ -52,6 +52,12 @@
                                         </svg>
                                         Imóveis
                                     </a>
+                                    <a href="{{ route('calendar.index') }}" class="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors duration-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        Calendário
+                                    </a>
                                     <a href="{{ route('locacoes.index') }}" class="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors duration-200">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
@@ -102,7 +108,7 @@
                         </div>
 
                         <!-- Cards de Ação -->
-                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6" x-transition.opacity.duration.700ms x-transition:enter-start="-translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100" style="animation-delay: 0.1s;">
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6" x-transition.opacity.duration.700ms x-transition:enter-start="-translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100" style="animation-delay: 0.1s;">
                             <a href="{{ route('locacoes.create') }}" class="card card-hover text-center">
                                 <div class="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
                                     <svg class="w-6 h-6 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,7 +129,17 @@
                                 <p class="text-xs lg:text-sm text-gray-500">Ver todas as locações</p>
                             </a>
 
-                            <a href="{{ route('profile.show') }}" class="card card-hover text-center lg:col-span-1">
+                            <a href="{{ route('calendar.index') }}" class="card card-hover text-center">
+                                <div class="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-r from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
+                                    <svg class="w-6 h-6 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <h3 class="font-semibold text-gray-800 mb-1 lg:mb-2 text-responsive-lg">Calendário</h3>
+                                <p class="text-xs lg:text-sm text-gray-500">Ver calendário do Airbnb</p>
+                            </a>
+
+                            <a href="{{ route('profile.show') }}" class="card card-hover text-center">
                                 <div class="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-r from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
                                     <svg class="w-6 h-6 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>

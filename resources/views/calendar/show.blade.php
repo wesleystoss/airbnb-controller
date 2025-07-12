@@ -128,11 +128,11 @@
             </div>
             <div class="flex items-center gap-3 text-xs">
                 <div class="flex items-center gap-1">
-                    <div class="w-3 h-3 rounded-full bg-[#FF385C]"></div>
+                    <span class="text-lg">🏠</span>
                     <span class="text-gray-600">Reservado</span>
                 </div>
                 <div class="flex items-center gap-1">
-                    <div class="w-3 h-3 rounded-full bg-gray-500"></div>
+                    <span class="text-lg">🚫</span>
                     <span class="text-gray-600">Indisponível</span>
                 </div>
             </div>
@@ -168,19 +168,23 @@
                         <div class="flex items-start justify-between">
                             <div class="flex-1">
                                 <div class="flex items-center justify-between mb-1">
-                                    <h3 class="font-semibold text-[#222]">
+                                    <div class="flex items-center gap-2">
                                         @if(isset($event['summary']))
-                                            @if($event['summary'] === 'Reserved')
-                                                🏠 Reservado
-                                            @elseif($event['summary'] === 'Airbnb (Not available)')
-                                                🚫 Indisponível
+                                            @if($event['summary'] === 'Reserved' || strpos($event['summary'], 'Reservado') !== false)
+                                                <span class="text-2xl">🏠</span>
+                                                <h3 class="font-semibold text-[#222]">Reservado</h3>
+                                            @elseif($event['summary'] === 'Airbnb (Not available)' || strpos($event['summary'], 'Indisponível') !== false)
+                                                <span class="text-2xl">🚫</span>
+                                                <h3 class="font-semibold text-[#222]">Indisponível</h3>
                                             @else
-                                                {{ $event['summary'] }}
+                                                <span class="text-2xl">📅</span>
+                                                <h3 class="font-semibold text-[#222]">{{ $event['summary'] }}</h3>
                                             @endif
                                         @else
-                                            Evento sem título
+                                            <span class="text-2xl">📅</span>
+                                            <h3 class="font-semibold text-[#222]">Evento sem título</h3>
                                         @endif
-                                    </h3>
+                                    </div>
                                     @if(isset($event['has_locacao']) && $event['has_locacao'])
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -204,7 +208,7 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
-                                            <span>Data de início: {{ $event['start']->format('d/m/Y H:i') }}</span>
+                                            <span>Data de início: {{ $event['start']->format('d/m/Y') }}</span>
                                         </div>
                                     @endif
                                     @if(isset($event['end']))
@@ -212,7 +216,7 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
-                                            <span>Data de fim: {{ $event['end']->format('d/m/Y H:i') }}</span>
+                                            <span>Data de fim: {{ $event['end']->format('d/m/Y') }}</span>
                                         </div>
                                     @endif
                                 </div>
