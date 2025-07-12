@@ -103,6 +103,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Última sincronização: {{ $imovel->last_ical_sync->format('d/m/Y H:i') }}
+                    @if($imovel->last_ical_sync->diffInMinutes(now()->setTimezone('America/Sao_Paulo')) < 5)
+                        <span class="text-xs text-blue-600">(atualizado automaticamente)</span>
+                    @endif
                 </div>
             @else
                 <div class="flex items-center gap-2 text-sm text-yellow-600">
@@ -266,6 +269,7 @@
                     initialView: 'dayGridMonth',
                     locale: 'pt-br',
                     height: 600,
+                    timeZone: 'America/Sao_Paulo',
                     buttonText: {
                         today: 'Hoje',
                         month: 'Mês',

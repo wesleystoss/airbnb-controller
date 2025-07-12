@@ -23,6 +23,15 @@ class CalendarController extends Controller
             abort(403, 'Acesso negado');
         }
 
+        // Sincronização automática se passou mais de 1 hora da última sincronização
+        if ($imovel->ical_url && (!$imovel->last_ical_sync || $imovel->last_ical_sync->diffInHours(now()->setTimezone('America/Sao_Paulo')) >= 1)) {
+            try {
+                $this->autoSyncCalendar($imovel);
+            } catch (\Exception $e) {
+                // Silenciar erros de sincronização automática
+            }
+        }
+
         $events = $this->getCalendarEvents($imovel);
         return view('calendar.show', compact('imovel', 'events'));
     }
@@ -65,7 +74,7 @@ class CalendarController extends Controller
             
             $imovel->update([
                 'calendar_events' => $events,
-                'last_ical_sync' => now()
+                'last_ical_sync' => now()->setTimezone('America/Sao_Paulo')
             ]);
             
             // Forçar limpeza do cache para garantir que as traduções sejam aplicadas
@@ -87,23 +96,23 @@ class CalendarController extends Controller
 
         $events = $imovel->calendar_events;
         
-        // Converter strings de data de volta para objetos Carbon
+        // Converter strings de data de volta para objetos Carbon (já estão no fuso correto)
         foreach ($events as &$event) {
             if (isset($event['start']) && is_string($event['start'])) {
                 try {
-                    $event['start'] = Carbon::parse($event['start']);
+                    $event['start'] = Carbon::parse($event['start'], 'America/Sao_Paulo');
                 } catch (\Exception $e) {
                     // Se falhar, tenta criar manualmente
-                    $date = new \DateTime($event['start']);
+                    $date = new \DateTime($event['start'], new \DateTimeZone('America/Sao_Paulo'));
                     $event['start'] = Carbon::instance($date);
                 }
             }
             if (isset($event['end']) && is_string($event['end'])) {
                 try {
-                    $event['end'] = Carbon::parse($event['end']);
+                    $event['end'] = Carbon::parse($event['end'], 'America/Sao_Paulo');
                 } catch (\Exception $e) {
                     // Se falhar, tenta criar manualmente
-                    $date = new \DateTime($event['end']);
+                    $date = new \DateTime($event['end'], new \DateTimeZone('America/Sao_Paulo'));
                     $event['end'] = Carbon::instance($date);
                 }
             }
@@ -201,7 +210,7 @@ class CalendarController extends Controller
         
         // Formato: 20241201T120000Z ou 20241201
         if (strlen($dateStr) === 15) {
-            // Com hora
+            // Com hora - converter de UTC para America/Sao_Paulo
             $year = substr($dateStr, 0, 4);
             $month = substr($dateStr, 4, 2);
             $day = substr($dateStr, 6, 2);
@@ -209,17 +218,39 @@ class CalendarController extends Controller
             $minute = substr($dateStr, 11, 2);
             $second = substr($dateStr, 13, 2);
             
-            return Carbon::create($year, $month, $day, $hour, $minute, $second);
+            // Criar em UTC e converter para America/Sao_Paulo
+            $utcDate = Carbon::create($year, $month, $day, $hour, $minute, $second, 'UTC');
+            return $utcDate->setTimezone('America/Sao_Paulo')->format('Y-m-d H:i:s');
         } elseif (strlen($dateStr) === 8) {
             // Apenas data (YYYYMMDD) - formato do Airbnb
             $year = substr($dateStr, 0, 4);
             $month = substr($dateStr, 4, 2);
             $day = substr($dateStr, 6, 2);
             
-            return Carbon::create($year, $month, $day, 0, 0, 0);
+            // Criar em America/Sao_Paulo
+            $date = Carbon::create($year, $month, $day, 0, 0, 0, 'America/Sao_Paulo');
+            return $date->format('Y-m-d H:i:s');
         } else {
             // Tenta outros formatos
             throw new \Exception("Formato de data não reconhecido: $dateStr");
+        }
+    }
+
+    private function autoSyncCalendar(Imovel $imovel)
+    {
+        if (!$imovel->ical_url) {
+            return;
+        }
+
+        try {
+            $events = $this->fetchAndParseIcal($imovel->ical_url);
+            
+            $imovel->update([
+                'calendar_events' => $events,
+                'last_ical_sync' => now()->setTimezone('America/Sao_Paulo')
+            ]);
+        } catch (\Exception $e) {
+            // Silenciar erros de sincronização automática
         }
     }
 }
