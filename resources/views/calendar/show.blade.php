@@ -167,19 +167,37 @@
                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
                         <div class="flex items-start justify-between">
                             <div class="flex-1">
-                                <h3 class="font-semibold text-[#222] mb-1">
-                                    @if(isset($event['summary']))
-                                        @if($event['summary'] === 'Reserved')
-                                            🏠 Reservado
-                                        @elseif($event['summary'] === 'Airbnb (Not available)')
-                                            🚫 Indisponível
+                                <div class="flex items-center justify-between mb-1">
+                                    <h3 class="font-semibold text-[#222]">
+                                        @if(isset($event['summary']))
+                                            @if($event['summary'] === 'Reserved')
+                                                🏠 Reservado
+                                            @elseif($event['summary'] === 'Airbnb (Not available)')
+                                                🚫 Indisponível
+                                            @else
+                                                {{ $event['summary'] }}
+                                            @endif
                                         @else
-                                            {{ $event['summary'] }}
+                                            Evento sem título
                                         @endif
-                                    @else
-                                        Evento sem título
+                                    </h3>
+                                    @if(isset($event['has_locacao']) && $event['has_locacao'])
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Registrada
+                                        </span>
+                                    @elseif(isset($event['summary']) && (strpos($event['summary'], 'Reserved') !== false || strpos($event['summary'], 'Reservado') !== false))
+                                        <a href="{{ route('locacoes.create', ['imovel_id' => $imovel->id, 'data_inicio' => $event['start']->format('Y-m-d'), 'data_fim' => $event['end']->format('Y-m-d'), 'nome' => 'Reserva Airbnb - ' . $event['start']->format('d/m/Y')]) }}" 
+                                           class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Registrar
+                                        </a>
                                     @endif
-                                </h3>
+                                </div>
                                 <div class="flex flex-wrap gap-4 text-sm text-gray-600">
                                     @if(isset($event['start']))
                                         <div class="flex items-center gap-1">

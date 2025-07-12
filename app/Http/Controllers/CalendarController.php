@@ -6,6 +6,7 @@ use App\Models\Imovel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class CalendarController extends Controller
@@ -114,6 +115,20 @@ class CalendarController extends Controller
                     // Se falhar, tenta criar manualmente
                     $date = new \DateTime($event['end'], new \DateTimeZone('America/Sao_Paulo'));
                     $event['end'] = Carbon::instance($date);
+                }
+            }
+            
+            // Verificar se existe locação registrada para este evento (apenas para reservas)
+            if (isset($event['start']) && isset($event['end'])) {
+                // Só verifica se é uma reserva (Reserved ou Reservado)
+                if (isset($event['summary']) && 
+                    (strpos($event['summary'], 'Reserved') !== false || 
+                     strpos($event['summary'], 'Reservado') !== false)) {
+                    $event['has_locacao'] = $this->checkIfLocacaoExists($imovel, $event['start'], $event['end']);
+                    
+                    
+                } else {
+                    $event['has_locacao'] = false;
                 }
             }
         }
@@ -252,5 +267,30 @@ class CalendarController extends Controller
         } catch (\Exception $e) {
             // Silenciar erros de sincronização automática
         }
+    }
+
+    private function checkIfLocacaoExists(Imovel $imovel, $startDate, $endDate)
+    {
+        // Verificar se existe uma locação que sobreponha com o período do evento
+        // Apenas para o imóvel específico do calendário
+        $locacao = \App\Models\Locacao::where('imovel_id', $imovel->id)
+            ->where(function($query) use ($startDate, $endDate) {
+                $query->where(function($q) use ($startDate, $endDate) {
+                    // Locações que começam antes e terminam durante o evento
+                    $q->where('data_inicio', '<=', $startDate->format('Y-m-d'))
+                      ->where('data_fim', '>=', $startDate->format('Y-m-d'));
+                })->orWhere(function($q) use ($startDate, $endDate) {
+                    // Locações que começam durante o evento
+                    $q->where('data_inicio', '>=', $startDate->format('Y-m-d'))
+                      ->where('data_inicio', '<=', $endDate->format('Y-m-d'));
+                })->orWhere(function($q) use ($startDate, $endDate) {
+                    // Locações que englobam completamente o evento
+                    $q->where('data_inicio', '<=', $startDate->format('Y-m-d'))
+                      ->where('data_fim', '>=', $endDate->format('Y-m-d'));
+                });
+            })
+            ->first();
+
+        return $locacao ? true : false;
     }
 }

@@ -258,10 +258,32 @@ class LocacaoWebController extends Controller
         return view('locacoes.index', compact('locacoes', 'resumoMensal', 'resumoAnual', 'periodo', 'mesesDisponiveis', 'locacoesMensal', 'coanfitriaoMensal', 'despesasMensal'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $imoveis = Imovel::where('user_id', auth()->id())->get();
-        return view('locacoes.create', compact('imoveis'));
+        
+        // Preencher dados se vierem da URL (do calendário)
+        $dadosPreenchidos = [
+            'imovel_id' => $request->get('imovel_id'),
+            'data_inicio' => $request->get('data_inicio'),
+            'data_fim' => $request->get('data_fim'),
+            'nome' => $request->get('nome', 'Locação'), // Padrão: Locação
+        ];
+        
+        // Calcular data de pagamento e valor total se vier do calendário
+        if ($request->get('data_inicio') && $request->get('data_fim')) {
+            $dataInicio = \Carbon\Carbon::parse($request->get('data_inicio'));
+            $dataFim = \Carbon\Carbon::parse($request->get('data_fim'));
+            
+            // Data de pagamento: 1 dia após a data de início
+            $dadosPreenchidos['data_pagamento'] = $dataInicio->copy()->addDay()->format('Y-m-d');
+            
+            // Calcular valor total: R$ 132 por dia
+            $dias = $dataInicio->diffInDays($dataFim);
+            $dadosPreenchidos['valor_total'] = $dias * 132;
+        }
+        
+        return view('locacoes.create', compact('imoveis', 'dadosPreenchidos'));
     }
 
     public function store(Request $request)
