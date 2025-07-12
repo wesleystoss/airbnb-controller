@@ -80,22 +80,24 @@
     {{-- Sincronização --}}
     @if($imovel->ical_url)
         <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 mb-6">
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center justify-between mb-4 flex-wrap">
                 <div class="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
                     <h2 class="text-lg font-bold text-[#222]">Sincronização</h2>
                 </div>
-                <form action="{{ route('calendar.sync', $imovel) }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="btn-action btn-action-success">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Sincronizar Agora
-                    </button>
-                </form>
+                <div class="sincronizar-mobile-center w-full sm:w-auto">
+                    <form action="{{ route('calendar.sync', $imovel) }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="btn-action btn-action-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Sincronizar Agora
+                        </button>
+                    </form>
+                </div>
             </div>
             @if($imovel->last_ical_sync)
                 <div class="flex items-center gap-2 text-sm text-green-600">
@@ -119,24 +121,16 @@
     @endif
     {{-- Calendário Visual --}}
     <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6 mb-6">
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center justify-between mb-4 flex-wrap">
             <div class="flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#FF385C] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <h2 class="text-lg font-bold text-[#222]">Calendário Visual</h2>
+                <h2 class="calendar-visual-title text-lg font-bold text-[#222]">Calendário Visual</h2>
             </div>
-            <div class="flex items-center gap-3 text-xs">
-                <div class="flex items-center gap-1">
-                    <span class="text-lg">🏠</span>
-                    <span class="text-gray-600">Reservado</span>
-                </div>
-                <div class="flex items-center gap-1">
-                    <span class="text-lg">🚫</span>
-                    <span class="text-gray-600">Indisponível</span>
-                </div>
-            </div>
+            <!-- (Aqui ficam os botões de navegação, se houver) -->
         </div>
+        <!-- Removida a legenda do calendário do Blade para ser inserida via JS -->
         <div id="calendar"></div>
     </div>
     {{-- Lista de Eventos (acessibilidade/fallback) --}}
@@ -265,7 +259,6 @@
                         start: ev.start && ev.start.toISOString ? ev.start.toISOString() : ev.start,
                         end: ev.end && ev.end.toISOString ? ev.end.toISOString() : ev.end,
                     };
-                    
                     // Definir cores baseado no tipo de evento
                     if (ev.summary && (ev.summary.includes('Reservado') || ev.summary.includes('Reserved'))) {
                         evento.backgroundColor = '#FF385C';
@@ -283,7 +276,6 @@
                         evento.textColor = '#ffffff';
                         evento.title = '📅 ' + (ev.summary || 'Evento');
                     }
-                    
                     return evento;
                 });
 
@@ -313,13 +305,39 @@
                         var descricao = info.event.extendedProps.description || 'Sem descrição';
                         var inicio = info.event.start.toLocaleDateString('pt-BR');
                         var fim = info.event.end.toLocaleDateString('pt-BR');
-                        
                         var mensagem = '📅 ' + info.event.title + '\n\n' +
                                      '📅 Data de início: ' + inicio + '\n' +
                                      '📅 Data de fim: ' + fim + '\n\n' +
                                      '📝 Detalhes: ' + descricao;
-                        
                         alert(mensagem);
+                    },
+                    datesSet: function() {
+                        // Adiciona a legenda acima do grid do calendário
+                        let legend = calendarEl.querySelector('.calendar-legend-dynamic');
+                        if (!legend) {
+                            legend = document.createElement('div');
+                            legend.className = 'calendar-legend calendar-legend-dynamic w-full mb-2';
+                            legend.innerHTML = `
+                                <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:1rem;">
+                                    <span class="text-lg">🏠</span>
+                                    <span class="text-gray-600">Reservado</span>
+                                </div>
+                                <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:1rem;margin-left:1.2rem;">
+                                    <span class="text-lg">🚫</span>
+                                    <span class="text-gray-600">Indisponível</span>
+                                </div>
+                            `;
+                        }
+                        // Remove se já existir
+                        var oldLegend = calendarEl.querySelector('.calendar-legend-dynamic');
+                        if (oldLegend) oldLegend.remove();
+                        // Insere logo após o header do calendário
+                        const fcHeader = calendarEl.querySelector('.fc-header-toolbar');
+                        if (fcHeader && fcHeader.nextSibling) {
+                            fcHeader.parentNode.insertBefore(legend, fcHeader.nextSibling);
+                        } else {
+                            calendarEl.prepend(legend);
+                        }
                     }
                 });
                 calendar.render();
