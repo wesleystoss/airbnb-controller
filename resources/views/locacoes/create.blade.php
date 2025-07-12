@@ -12,37 +12,45 @@
             <select id="imovel_id" name="imovel_id" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" required>
                 <option value="">Selecione um imóvel</option>
                 @foreach($imoveis as $imovel)
-                    <option value="{{ $imovel->id }}">{{ $imovel->nome }}</option>
+                    <option value="{{ $imovel->id }}" {{ isset($dadosPreenchidos['imovel_id']) && $dadosPreenchidos['imovel_id'] == $imovel->id ? 'selected' : '' }}>
+                        {{ $imovel->nome }}
+                    </option>
                 @endforeach
             </select>
         </div>
         <div>
             <label for="nome" class="block text-xs text-gray-600 mb-1">Tipo <span class="text-red-500">*</span></label>
             <select class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="nome" name="nome" required>
-                <option value="Locação">Locação</option>
-                <option value="Extensão">Extensão</option>
+                <option value="Locação" {{ isset($dadosPreenchidos['nome']) && $dadosPreenchidos['nome'] == 'Locação' ? 'selected' : '' }}>Locação</option>
+                <option value="Extensão" {{ isset($dadosPreenchidos['nome']) && $dadosPreenchidos['nome'] == 'Extensão' ? 'selected' : '' }}>Extensão</option>
             </select>
         </div>
         <div>
             <label for="valor_total" class="block text-xs text-gray-600 mb-1">Valor Total <span class="text-red-500">*</span></label>
             <div class="flex items-center gap-1">
                 <span class="text-gray-500 text-xs">R$</span>
-                <input type="number" step="0.01" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="valor_total" name="valor_total" required>
+                <input type="number" step="0.01" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="valor_total" name="valor_total" value="{{ $dadosPreenchidos['valor_total'] ?? '' }}" required>
             </div>
+            @if(isset($dadosPreenchidos['valor_total']))
+                <p class="text-xs text-gray-500 mt-1">Calculado automaticamente: R$ 132,00 por dia</p>
+            @endif
         </div>
         <div class="flex gap-2">
             <div class="w-1/2">
                 <label for="data_inicio" class="block text-xs text-gray-600 mb-1">Data Início</label>
-                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_inicio" name="data_inicio">
+                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_inicio" name="data_inicio" value="{{ $dadosPreenchidos['data_inicio'] ?? '' }}">
             </div>
             <div class="w-1/2">
                 <label for="data_fim" class="block text-xs text-gray-600 mb-1">Data Fim</label>
-                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_fim" name="data_fim">
+                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_fim" name="data_fim" value="{{ $dadosPreenchidos['data_fim'] ?? '' }}">
             </div>
             <div class="w-1/2">
                 <label for="data_pagamento" class="block text-xs text-gray-600 mb-1">Data de Pagamento <span class="text-red-500">*</span></label>
-                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_pagamento" name="data_pagamento" required>
+                <input type="date" class="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#FF385C] focus:outline-none" id="data_pagamento" name="data_pagamento" value="{{ $dadosPreenchidos['data_pagamento'] ?? '' }}" required>
             </div>
+            @if(isset($dadosPreenchidos['data_pagamento']))
+                <p class="text-xs text-gray-500 mt-1">Calculado automaticamente: 1 dia após a data de início</p>
+            @endif
         </div>
         <div class="flex gap-2 mt-2">
             <button type="submit" class="btn-action btn-action-success">

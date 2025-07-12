@@ -25,7 +25,7 @@ class ImovelController extends Controller
      */
     public function create()
     {
-        //
+        return view('imoveis.create');
     }
 
     /**
@@ -79,9 +79,9 @@ class ImovelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Imovel $imovel)
     {
-        //
+        return view('imoveis.edit', compact('imovel'));
     }
 
     /**

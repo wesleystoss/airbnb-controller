@@ -394,4 +394,164 @@
             background-position: 200% 0;
         }
     }
+    
+    /* Estilos específicos para o calendário FullCalendar */
+    .fc-header-toolbar {
+        @apply flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between;
+    }
+    
+    .fc-toolbar-chunk {
+        @apply flex flex-col gap-2 sm:flex-row;
+    }
+    
+    .fc-button-group {
+        @apply flex flex-col gap-1 sm:flex-row;
+    }
+    
+    .fc-button {
+        @apply text-xs sm:text-sm;
+    }
+    
+    /* Responsividade específica para telas menores que 500px */
+    @media (max-width: 500px) {
+        .fc-header-toolbar {
+            @apply flex-col gap-3;
+        }
+        
+        .fc-toolbar-chunk {
+            @apply flex-col gap-2;
+        }
+        
+        .fc-button-group {
+            @apply flex-col gap-1;
+        }
+        
+        .fc-button {
+            @apply w-full justify-center;
+        }
+        
+        .fc-toolbar-title {
+            @apply text-center text-sm;
+        }
+    }
+}
+
+/* Centralização dos botões do FullCalendar no mobile - corrigido para não estourar */
+@media (max-width: 500px) {
+  .fc-header-toolbar {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: stretch !important;
+  }
+  .fc-toolbar-chunk {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .fc-button-group {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 220px !important;
+    margin: 0 auto 0.25rem auto !important;
+    gap: 0.5rem !important;
+  }
+  .fc-button {
+    width: 100% !important;
+    max-width: 220px !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    padding: 0.75rem 0 !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+  }
+  .fc-toolbar-title {
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .sincronizar-mobile-center {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  .sincronizar-mobile-center .btn-action {
+    width: 100%;
+    max-width: 220px;
+  }
+  #calendar {
+    min-height: 700px !important;
+    height: 700px !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .calendar-legend {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.2rem;
+    width: 100%;
+  }
+  .calendar-legend > div {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 1rem;
+  }
+  .calendar-visual-title {
+    margin-bottom: 0.2rem;
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
+}
+
+@media (max-width: 500px) {
+  /* Botões de visualização do calendário em linha no mobile */
+  .fc-header-toolbar .fc-button-group:last-child {
+    flex-direction: row !important;
+    width: 100% !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+  }
+  .fc-header-toolbar .fc-button-group:last-child .fc-button {
+    width: auto !important;
+    min-width: 70px !important;
+    max-width: 100px !important;
+    font-size: 0.95rem !important;
+    padding: 0.5rem 0.5rem !important;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 500px) {
+  /* Botões de navegação do calendário em linha no mobile */
+  .fc-header-toolbar .fc-button-group:first-child {
+    flex-direction: row !important;
+    width: 100% !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+  }
+  .fc-header-toolbar .fc-button-group:first-child .fc-button {
+    width: auto !important;
+    min-width: 50px !important;
+    max-width: 80px !important;
+    font-size: 1rem !important;
+    padding: 0.5rem 0.5rem !important;
+    margin: 0 !important;
+  }
 }
