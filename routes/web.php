@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ImovelController;
+use App\Http\Controllers\CalendarController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -53,4 +54,10 @@ Route::middleware(['auth'])->group(function () {
         ->except(['show', 'create', 'edit']);
     Route::post('imoveis/{imovel}/compartilhar', [ImovelController::class, 'adicionarCompartilhamento'])->name('imoveis.compartilhamento.adicionar');
     Route::delete('imoveis/compartilhar/{compartilhamento}', [ImovelController::class, 'removerCompartilhamento'])->name('imoveis.compartilhamento.remover');
+    
+    // Rotas do Calendário
+    Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');
+    Route::get('/calendar/{imovel}', [CalendarController::class, 'show'])->name('calendar.show');
+    Route::post('/calendar/{imovel}/update-ical', [CalendarController::class, 'updateIcalUrl'])->name('calendar.update-ical');
+    Route::post('/calendar/{imovel}/sync', [CalendarController::class, 'syncCalendar'])->name('calendar.sync');
 });
