@@ -53,7 +53,9 @@ class LocacaoWebController extends Controller
             $locacoesMes = $todasLocacoes->filter(function($locacao) use ($data) {
                 return Carbon::parse($locacao->data_pagamento)->format('Y-m') === $data->format('Y-m');
             });
-            
+            if ($locacoesMes->count() === 0) {
+                continue; // Pula meses sem locação
+            }
             $receitasMes = $locacoesMes->sum('valor_total');
             $coanfitriaoMes = $locacoesMes->sum(function($locacao) {
                 return round($locacao->valor_total * 0.3333, 2);
@@ -236,18 +238,22 @@ class LocacaoWebController extends Controller
             $coanfitriao = round($locacao->valor_total * 0.3333, 2);
             $despesas = $locacao->despesas->sum('valor');
             $lucro = $locacao->valor_total - $coanfitriao - $despesas;
+            // Só adiciona se houver pelo menos uma locação no mês
+            if (!isset($locacoesMensal[$mes])) {
+                $locacoesMensal[$mes] = 0;
+            }
+            $locacoesMensal[$mes] += $locacao->valor_total;
+            $coanfitriaoMensal[$mes] = ($coanfitriaoMensal[$mes] ?? 0) + $coanfitriao;
+            $despesasMensal[$mes] = ($despesasMensal[$mes] ?? 0) + $despesas;
             $resumoMensal[$mes] = ($resumoMensal[$mes] ?? 0) + $lucro;
             $resumoAnual[$ano] = ($resumoAnual[$ano] ?? 0) + $lucro;
             $mesesDisponiveis[$mes] = Carbon::parse($locacao->data_pagamento)->format('Y-m');
-            $locacoesMensal[$mes] = ($locacoesMensal[$mes] ?? 0) + $locacao->valor_total;
-            $coanfitriaoMensal[$mes] = ($coanfitriaoMensal[$mes] ?? 0) + $coanfitriao;
-            $despesasMensal[$mes] = ($despesasMensal[$mes] ?? 0) + $despesas;
         }
-        // Garante que todos os meses presentes no resumoMensal estejam em todos os arrays
+        // Remove meses sem locação dos arrays de resumo
         foreach (array_keys($resumoMensal) as $mes) {
-            $locacoesMensal[$mes] = $locacoesMensal[$mes] ?? 0;
-            $coanfitriaoMensal[$mes] = $coanfitriaoMensal[$mes] ?? 0;
-            $despesasMensal[$mes] = $despesasMensal[$mes] ?? 0;
+            if (($locacoesMensal[$mes] ?? 0) == 0) {
+                unset($resumoMensal[$mes], $locacoesMensal[$mes], $coanfitriaoMensal[$mes], $despesasMensal[$mes], $mesesDisponiveis[$mes]);
+            }
         }
         ksort($resumoMensal);
         ksort($resumoAnual);
