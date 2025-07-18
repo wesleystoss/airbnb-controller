@@ -24,7 +24,8 @@ class CheckoutController extends Controller
 
         $preference = [
             'items' => [[
-                'title' => 'Assinatura Airbnb Controle',
+                'title' => 'Assinatura Airbnb Controle - 12 meses de acesso ilimitado, relatórios automáticos, agenda integrada e suporte humano',
+                'description' => 'Tenha controle total dos seus imóveis, locações e finanças em um só lugar. Assinatura anual do Airbnb Controle: relatórios automáticos, agenda integrada, suporte humano e cancelamento fácil. Pagamento único, acesso ilimitado por 12 meses.',
                 'quantity' => 1,
                 'currency_id' => 'BRL',
                 'unit_price' => 1,
