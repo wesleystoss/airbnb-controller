@@ -20,7 +20,7 @@ class CheckoutController extends Controller
                 'title' => 'Assinatura Airbnb Controle',
                 'quantity' => 1,
                 'currency_id' => 'BRL',
-                'unit_price' => 39.90,
+                'unit_price' => 1,
             ]],
             'payer' => [
                 'email' => Auth::user()->email,
