@@ -75,7 +75,7 @@
         <!-- Header Mobile-First -->
         <header class="w-full bg-white/80 backdrop-blur-md border-b border-gray-200/50 fixed top-0 left-0 z-50 px-4">
             <div class="max-w-md lg:max-w-3xl xl:max-w-5xl mx-auto flex items-center justify-between py-3 lg:py-6">
-                <a href="{{ route('home') }}" class="flex items-center gap-2 lg:gap-4">
+                <a href="{{ route('painel') }}" class="flex items-center gap-2 lg:gap-4">
                     <div class="w-8 h-8 lg:w-12 lg:h-12 bg-gradient-to-r from-[#FF385C] to-[#e11d48] rounded-lg flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-5 h-5 lg:w-8 lg:h-8 text-white">
                             <path fill="currentColor" d="M16 2.7c-2.2 0-4.2 1.2-5.3 3.1L3.2 18.2c-1.1 1.9-1.1 4.2 0 6.1c1.1 1.9 3.1 3.1 5.3 3.1h15c2.2 0 4.2-1.2 5.3-3.1c1.1-1.9 1.1-4.2 0-6.1L21.3 5.8C20.2 3.9 18.2 2.7 16 2.7m0 2c1.5 0 2.9.8 3.6 2.1l7.5 12.4c.7 1.3.7 2.9 0 4.2c-.7 1.3-2.1 2.1-3.6 2.1h-15c-1.5 0-2.9-.8-3.6-2.1c-.7-1.3-.7-2.9 0-4.2l7.5-12.4C13.1 5.5 14.5 4.7 16 4.7m0 4.3c-1.1 0-2.1.6-2.7 1.6l-6.2 10.2c-.6 1-.6 2.2 0 3.2c.6 1 1.6 1.6 2.7 1.6h12.4c1.1 0 2.1-.6 2.7-1.6c.6-1 .6-2.2 0-3.2l-6.2-10.2c-.6-1-1.6-1.6-2.7-1.6m0 2c.5 0 1 .3 1.3.7l6.2 10.2c.3.5.3 1.1 0 1.6c-.3.5-.8.7-1.3.7H9.8c-.5 0-1-.3-1.3-.7c-.3-.5-.3-1.1 0-1.6l6.2-10.2c.3-.5.8-.7 1.3-.7"/>
