@@ -14,34 +14,44 @@ class CheckoutController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        
+        // Use o access token do .env via config
         $accessToken = config('services.mercadopago.access_token');
-        $user = Auth::user();
 
-        // Cria uma assinatura vinculada ao plano do Mercado Pago
-        $subscription = [
-            'preapproval_plan_id' => '2c9380849817d4bc01981b348b0e0153', // ID do plano criado no painel
-            'payer_email' => $user->email,
-            'back_url' => 'https://airbnb.wesleystoss.com.br/assinatura?success=true',
-            'reason' => 'Assinatura Airbnb Controle',
-            'external_reference' => $user->id
+        $preference = [
+            'items' => [[
+                'title' => 'Assinatura Airbnb Controle',
+                'quantity' => 1,
+                'currency_id' => 'BRL',
+                'unit_price' => 1,
+            ]],
+            'payer' => [
+                'email' => Auth::user()->email,
+            ],
+            'external_reference' => Auth::user()->id, // ID do usuário para identificar no webhook
+            'back_urls' => [
+                'success' => 'https://a5dfef01245f.ngrok-free.app/',
+                'failure' => 'https://a5dfef01245f.ngrok-free.app/assinatura',
+                'pending' => 'https://a5dfef01245f.ngrok-free.app/assinatura',
+            ],
+            'auto_return' => 'approved',
         ];
 
-        $response = Http::withHeaders([
+        $response = \Illuminate\Support\Facades\Http::withHeaders([
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type' => 'application/json',
-        ])->post('https://api.mercadopago.com/preapproval', $subscription);
+        ])->withBody(json_encode($preference), 'application/json')
+          ->post('https://api.mercadopago.com/checkout/preferences');
 
         if ($response->successful() && isset($response['init_point'])) {
             return redirect($response['init_point']);
         } else {
             $debugInfo = [
                 'access_token' => $accessToken,
-                'payer_email' => $user->email,
-                'request' => $subscription,
+                'payer_email' => Auth::user()->email,
+                'request' => $preference,
                 'response' => $response->json(),
             ];
-            return back()->with('error', 'Erro ao criar assinatura recorrente: ' . json_encode($debugInfo));
+            return back()->with('error', 'Erro ao criar preferência de pagamento: ' . json_encode($debugInfo));
         }
     }
 
@@ -72,7 +82,7 @@ class CheckoutController extends Controller
         // Verifica se está dentro do prazo de 7 dias para reembolso
         if ($dataInicio && $agora->diffInDays($dataInicio) <= 7) {
             // Tenta estornar o pagamento via API do Mercado Pago
-            $refundResponse = Http::withHeaders([
+            $refundResponse = \Illuminate\Support\Facades\Http::withHeaders([
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Content-Type' => 'application/json',
                 'X-Idempotency-Key' => (string) Str::uuid(), // Gera um UUID único
