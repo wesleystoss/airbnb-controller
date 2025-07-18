@@ -112,8 +112,8 @@ class LocacaoWebController extends Controller
         $ultimos3Meses = array_slice($ultimos6Meses, -3);
         $anteriores3Meses = array_slice($ultimos6Meses, 0, 3);
         
-        $mediaLucroUltimos3 = array_sum(array_column($ultimos3Meses, 'lucro')) / count($ultimos3Meses);
-        $mediaLucroAnteriores3 = array_sum(array_column($anteriores3Meses, 'lucro')) / count($anteriores3Meses);
+        $mediaLucroUltimos3 = count($ultimos3Meses) > 0 ? array_sum(array_column($ultimos3Meses, 'lucro')) / count($ultimos3Meses) : 0;
+        $mediaLucroAnteriores3 = count($anteriores3Meses) > 0 ? array_sum(array_column($anteriores3Meses, 'lucro')) / count($anteriores3Meses) : 0;
         
         $tendencia = $mediaLucroUltimos3 - $mediaLucroAnteriores3;
         $tendenciaPercentual = $mediaLucroAnteriores3 != 0 ? (($tendencia / $mediaLucroAnteriores3) * 100) : 0;

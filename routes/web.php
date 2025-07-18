@@ -9,6 +9,9 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ImovelController;
 use App\Http\Controllers\CalendarController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\MercadoPagoWebhookController;
+use App\Http\Controllers\CheckoutController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -60,4 +63,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/calendar/{imovel}', [CalendarController::class, 'show'])->name('calendar.show');
     Route::post('/calendar/{imovel}/update-ical', [CalendarController::class, 'updateIcalUrl'])->name('calendar.update-ical');
     Route::post('/calendar/{imovel}/sync', [CalendarController::class, 'syncCalendar'])->name('calendar.sync');
+
+    Route::get('/checkout', function () {
+        return view('checkout');
+    })->name('checkout');
+    Route::get('/checkout/pagar', [\App\Http\Controllers\CheckoutController::class, 'pagar'])->name('checkout.pagar');
 });
+
+Route::get('/assinatura', function () {
+    return view('assinatura');
+})->name('assinatura');
+
+Route::post('/webhook/mercadopago', [MercadoPagoWebhookController::class, 'handle'])->name('webhook.mercadopago');
