@@ -11,6 +11,11 @@ class CheckoutController extends Controller
 {
     public function pagar(Request $request)
     {
+        $user = Auth::user();
+        $assinaturaAtiva = $user->assinaturaAtiva;
+        if ($assinaturaAtiva && $assinaturaAtiva->status === 'ativa' && $assinaturaAtiva->data_expiracao->isFuture()) {
+            return redirect()->route('painel');
+        }
         if (!Auth::check()) {
             return redirect()->route('login');
         }

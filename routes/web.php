@@ -17,7 +17,13 @@ use App\Http\Controllers\CheckoutController;
 //     return view('welcome');
 // });
 
-Route::get('/', [LocacaoWebController::class, 'home'])->name('home')->middleware(['auth', 'assinatura.ativa']);
+// Home pública para todos
+Route::get('/', function () {
+    return view('assinatura');
+})->name('home');
+
+// Painel protegido para logados com assinatura ativa
+Route::get('/painel', [LocacaoWebController::class, 'home'])->name('painel')->middleware(['auth', 'assinatura.ativa']);
 
 // Rotas de autenticação
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
