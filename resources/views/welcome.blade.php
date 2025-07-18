@@ -64,11 +64,17 @@
                                         </svg>
                                         Minhas Locações
                                     </a>
-                                    <a href="{{ route('profile.show') }}" class="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors duration-200 rounded-t-2xl">
+                                    <a href="{{ route('profile.show') }}" class="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors duration-200">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
                                         Meu Perfil
+                                    </a>
+                                    <a href="{{ route('assinatura') }}" class="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors duration-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Minha Assinatura
                                     </a>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
@@ -147,6 +153,16 @@
                                 </div>
                                 <h3 class="font-semibold text-gray-800 mb-1 lg:mb-2 text-responsive-lg">Meu Perfil</h3>
                                 <p class="text-xs lg:text-sm text-gray-500">Gerenciar conta</p>
+                            </a>
+
+                            <a href="{{ route('assinatura') }}" class="card card-hover text-center">
+                                <div class="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-3 lg:mb-4">
+                                    <svg class="w-6 h-6 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="font-semibold text-gray-800 mb-1 lg:mb-2 text-responsive-lg">Minha Assinatura</h3>
+                                <p class="text-xs lg:text-sm text-gray-500">Gerenciar assinatura</p>
                             </a>
                         </div>
 
