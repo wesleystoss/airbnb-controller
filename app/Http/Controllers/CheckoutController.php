@@ -21,7 +21,7 @@ class CheckoutController extends Controller
         $subscription = [
             'preapproval_plan_id' => '2c9380849817d4bc01981b348b0e0153', // ID do plano criado no painel
             'payer_email' => $user->email,
-            'back_url' => 'https://a5dfef01245f.ngrok-free.app/assinatura?success=true',
+            'back_url' => 'https://044157ce8acc.ngrok-free.app/assinatura?success=true',
             'reason' => 'Assinatura Airbnb Controle',
             'external_reference' => $user->id
         ];

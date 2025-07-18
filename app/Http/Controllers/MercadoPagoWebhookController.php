@@ -551,23 +551,28 @@ class MercadoPagoWebhookController extends Controller
 
         try {
             // Busca o usuário pelo external_reference
-            $user = User::find($externalReference);
+            $user = \App\Models\User::find($externalReference);
             
             if (!$user) {
                 Log::error('❌ Usuário não encontrado para o external_reference', ['external_reference' => $externalReference]);
                 return;
             }
 
-            // Cancela a assinatura local
-            $assinatura = Assinatura::where('user_id', $user->id)
-                                  ->where('status', 'ativa')
-                                  ->first();
+            // Cancela a assinatura local (se existir e estiver ativa)
+            $assinatura = \App\Models\Assinatura::where('user_id', $user->id)
+                                      ->where('status', 'ativa')
+                                      ->first();
 
             if ($assinatura) {
-                $assinatura->cancelar();
+                $assinatura->status = 'cancelada';
+                $assinatura->save();
                 Log::info('✅ Assinatura local cancelada com sucesso', [
                     'user_id' => $user->id,
                     'assinatura_id' => $assinatura->id
+                ]);
+            } else {
+                Log::info('ℹ️ Nenhuma assinatura ativa encontrada para cancelar', [
+                    'user_id' => $user->id
                 ]);
             }
 
