@@ -46,7 +46,11 @@
                             <span class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-[#FF385C] to-[#e11d48] text-white text-3xl font-bold rounded-full shadow">R$ 39,90/mês</span>
                             <span class="text-xs text-gray-500">Cobrança automática, cancele quando quiser</span>
                         </div>
-                        <a href="https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=2c9380849817d4bc01981b348b0e0153&external_reference={{ auth()->id() }}" class="inline-block w-full md:w-auto bg-gradient-to-r from-[#FF385C] to-[#e11d48] hover:from-[#e11d48] hover:to-[#FF385C] text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transition mb-2">Quero Assinar Agora</a>
+                        <form action="{{ route('checkout.pagar') }}" method="GET" class="inline-block w-full md:w-auto">
+                            <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-[#FF385C] to-[#e11d48] hover:from-[#e11d48] hover:to-[#FF385C] text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transition mb-2">
+                                Quero Assinar Agora
+                            </button>
+                        </form>
                     </div>
                     {{-- 2. DOR/PROBLEMA --}}
                     <div class="border-t border-gray-100 pt-8">
@@ -180,7 +184,11 @@
                 {{-- CHAMADA FINAL --}}
                 <section class="py-8 px-4 text-center">
                     <div class="max-w-2xl mx-auto">
-                        <a href="https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=2c9380849817d4bc01981b348b0e0153&external_reference={{ auth()->id() }}" class="inline-block w-full md:w-auto bg-gradient-to-r from-[#FF385C] to-[#e11d48] hover:from-[#e11d48] hover:to-[#FF385C] text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transition mb-2">Quero Assinar Agora</a>
+                        <form action="{{ route('checkout.pagar') }}" method="GET" class="inline-block w-full md:w-auto">
+                            <button type="submit" class="inline-block w-full md:w-auto bg-gradient-to-r from-[#FF385C] to-[#e11d48] hover:from-[#e11d48] hover:to-[#FF385C] text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transition mb-2">
+                                Quero Assinar Agora
+                            </button>
+                        </form>
                         <div class="text-xs text-gray-400 mt-1">Cobrança automática, cancele quando quiser</div>
                     </div>
                 </section>
