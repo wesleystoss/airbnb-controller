@@ -74,4 +74,7 @@ Route::get('/assinatura', function () {
     return view('assinatura');
 })->name('assinatura');
 
-Route::post('/webhook/mercadopago', [MercadoPagoWebhookController::class, 'handle'])->name('webhook.mercadopago');
+// Rota de teste para o webhook (apenas para debug)
+Route::get('/webhook/mercadopago/test', function() {
+    return response()->json(['status' => 'webhook endpoint is working'], 200);
+})->name('webhook.mercadopago.test');
