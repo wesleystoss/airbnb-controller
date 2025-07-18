@@ -17,18 +17,13 @@ class CheckoutController extends Controller
         $accessToken = config('services.mercadopago.access_token');
         $user = Auth::user();
 
-        // Cria uma assinatura recorrente no Mercado Pago
+        // Cria uma assinatura vinculada ao plano do Mercado Pago
         $subscription = [
-            'reason' => 'Assinatura Airbnb Controle',
-            'auto_recurring' => [
-                'frequency' => 1,
-                'frequency_type' => 'months',
-                'transaction_amount' => 39.90,
-                'currency_id' => 'BRL'
-            ],
+            'preapproval_plan_id' => '2c9380849817d4bc01981b348b0e0153', // ID do plano criado no painel
+            'payer_email' => $user->email,
             'back_url' => 'https://a5dfef01245f.ngrok-free.app/assinatura?success=true',
-            'external_reference' => $user->id,
-            'payer_email' => $user->email
+            'reason' => 'Assinatura Airbnb Controle',
+            'external_reference' => $user->id
         ];
 
         $response = Http::withHeaders([
