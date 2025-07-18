@@ -74,35 +74,117 @@ class CheckoutController extends Controller
             return back()->with('error', 'Nenhuma assinatura ativa encontrada');
         }
 
+        // Se não veio motivo, exibe formulário
+        if ($request->isMethod('get')) {
+            $valorEstorno = null;
+            $tipoEstorno = null;
+            $mensagemEstorno = null;
+            if (!str_starts_with($assinatura->payment_id, 'GRATUITA_')) {
+                $dataInicio = $assinatura->data_inicio;
+                $dataExpiracao = $assinatura->data_expiracao;
+                $agora = now();
+                $totalDiasCiclo = $dataInicio->diffInDays($dataExpiracao) ?: 1;
+                $diffDias = $dataInicio ? $agora->diffInDays($dataInicio, false) : null;
+                if ($dataInicio && $diffDias !== null && $diffDias >= 0 && $diffDias <= 7) {
+                    $valorEstorno = $assinatura->valor;
+                    $tipoEstorno = 'integral';
+                    $mensagemEstorno = 'Você receberá o estorno integral de R$ ' . number_format($valorEstorno, 2, ',', '.');
+                } else {
+                    $diasRestantes = $agora->diffInDays($dataExpiracao, false);
+                    if ($diasRestantes > 0) {
+                        $valorDiario = $assinatura->valor / $totalDiasCiclo;
+                        $valorEstorno = round($valorDiario * $diasRestantes, 2);
+                        $tipoEstorno = 'parcial';
+                        $mensagemEstorno = 'Você receberá o estorno parcial de R$ ' . number_format($valorEstorno, 2, ',', '.') . ' referente aos dias não utilizados.';
+                    } else {
+                        $tipoEstorno = 'nenhum';
+                        $mensagemEstorno = 'Não há direito a estorno, pois não restam dias não utilizados.';
+                    }
+                }
+            } else {
+                $tipoEstorno = 'nenhum';
+                $mensagemEstorno = 'Assinaturas gratuitas não possuem estorno.';
+            }
+            return view('assinatura.cancelar', compact('assinatura', 'valorEstorno', 'tipoEstorno', 'mensagemEstorno'));
+        }
+
+        // Valida motivo
+        $request->validate([
+            'motivo' => 'required|string|min:10',
+        ], [
+            'motivo.required' => 'Por favor, explique o motivo do cancelamento.',
+            'motivo.min' => 'Explique o motivo com pelo menos 10 caracteres.',
+        ]);
+
+        $valorEstorno = null;
+        $estornoRealizado = false;
+        $statusRequerimento = 'diferido';
+
         // Se for assinatura gratuita/manual, cancela só localmente
         if (str_starts_with($assinatura->payment_id, 'GRATUITA_')) {
             $assinatura->cancelar();
-            return back()->with('success', 'Assinatura gratuita cancelada com sucesso.');
-        }
-
-        $accessToken = config('services.mercadopago.access_token');
-        $dataInicio = $assinatura->data_inicio;
-        $agora = now();
-
-        // Verifica se está dentro do prazo de 7 dias para reembolso
-        if ($dataInicio && $agora->diffInDays($dataInicio) <= 7) {
-            // Tenta estornar o pagamento via API do Mercado Pago
-            $refundResponse = \Illuminate\Support\Facades\Http::withHeaders([
-                'Authorization' => 'Bearer ' . $accessToken,
-                'Content-Type' => 'application/json',
-                'X-Idempotency-Key' => (string) Str::uuid(), // Gera um UUID único
-            ])->post("https://api.mercadopago.com/v1/payments/{$assinatura->payment_id}/refunds");
-
-            if ($refundResponse->successful()) {
-                $assinatura->cancelar();
-                return back()->with('success', 'Assinatura cancelada e valor estornado com sucesso. O reembolso será processado pelo Mercado Pago.');
-            } else {
-                return back()->with('error', 'Erro ao estornar o pagamento: ' . $refundResponse->body());
-            }
         } else {
-            // Fora do prazo de reembolso, apenas cancela localmente
-            $assinatura->cancelar();
-            return back()->with('success', 'Assinatura cancelada. O prazo para reembolso automático já expirou.');
+            $accessToken = config('services.mercadopago.access_token');
+            $dataInicio = $assinatura->data_inicio;
+            $dataExpiracao = $assinatura->data_expiracao;
+            $agora = now();
+
+            // Verifica se está dentro do prazo de 7 dias para reembolso
+            $diffDias = $dataInicio ? $agora->diffInDays($dataInicio, false) : null;
+            if ($dataInicio && $diffDias !== null && $diffDias >= 0 && $diffDias <= 7) {
+                // Tenta estornar o pagamento total via API do Mercado Pago
+                $refundResponse = \Illuminate\Support\Facades\Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                    'Content-Type' => 'application/json',
+                    'X-Idempotency-Key' => (string) \Illuminate\Support\Str::uuid(),
+                ])->post("https://api.mercadopago.com/v1/payments/{$assinatura->payment_id}/refunds");
+
+                if ($refundResponse->successful()) {
+                    $valorEstorno = $assinatura->valor;
+                    $estornoRealizado = true;
+                    $assinatura->cancelar();
+                    $msg = 'Assinatura cancelada e valor estornado com sucesso. O reembolso será processado pelo Mercado Pago.';
+                } else {
+                    $assinatura->cancelar();
+                    $msg = 'Assinatura cancelada. O prazo para reembolso automático já expirou ou houve erro no estorno.';
+                }
+            } else {
+                // Fora do prazo de reembolso, calcular estorno parcial
+                $diasRestantes = $agora->diffInDays($dataExpiracao, false);
+                $totalDiasCiclo = $dataInicio->diffInDays($dataExpiracao) ?: 1;
+                if ($diasRestantes > 0) {
+                    $valorDiario = $assinatura->valor / $totalDiasCiclo;
+                    $valorEstorno = round($valorDiario * $diasRestantes, 2);
+                    // Tenta estornar o valor parcial via API do Mercado Pago
+                    $refundResponse = \Illuminate\Support\Facades\Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $accessToken,
+                        'Content-Type' => 'application/json',
+                        'X-Idempotency-Key' => (string) \Illuminate\Support\Str::uuid(),
+                    ])->post("https://api.mercadopago.com/v1/payments/{$assinatura->payment_id}/refunds", [
+                        'amount' => $valorEstorno
+                    ]);
+                    if ($refundResponse->successful()) {
+                        $estornoRealizado = true;
+                        $msg = 'Assinatura cancelada e valor parcial estornado com sucesso. O reembolso proporcional será processado pelo Mercado Pago.';
+                    } else {
+                        $msg = 'Assinatura cancelada. Não foi possível realizar o estorno parcial automático.';
+                    }
+                } else {
+                    $msg = 'Assinatura cancelada. Não há dias restantes para estorno.';
+                }
+                $assinatura->cancelar();
+            }
         }
+
+        // Cria requerimento
+        \App\Models\Requerimento::create([
+            'assinatura_id' => $assinatura->id,
+            'motivo' => $request->motivo,
+            'status' => $statusRequerimento,
+            'valor_estorno' => $valorEstorno,
+            'estorno_realizado' => $estornoRealizado,
+        ]);
+
+        return redirect()->route('assinatura')->with('success', $msg ?? 'Assinatura cancelada.');
     }
 } 
