@@ -41,8 +41,8 @@
                     <h1 class="text-4xl lg:text-5xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#FF385C] to-[#e11d48]">Chega de planilhas, confusão e tempo perdido</h1>
                     <p class="text-lg text-gray-700 mb-6">Tenha controle total dos seus imóveis, locações e finanças em um só lugar.</p>
                     <div class="flex flex-col items-center gap-2 mb-4">
-                        <span class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-[#FF385C] to-[#e11d48] text-white text-3xl font-bold rounded-full shadow">R$ 39,90/mês</span>
-                        <span class="text-xs text-gray-500">Cobrança automática, cancele quando quiser</span>
+                        <span class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-[#FF385C] to-[#e11d48] text-white text-3xl font-bold rounded-full shadow">R$ 13,32/mês</span>
+                        <span class="text-xs text-gray-500">Pagamento único de R$ 159,90 (equivalente a 12 meses)</span>
                     </div>
                     <form action="{{ route('checkout.pagar') }}" method="GET" class="inline-block w-full md:w-auto">
                         <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-[#FF385C] to-[#e11d48] hover:from-[#e11d48] hover:to-[#FF385C] text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transition mb-2">
