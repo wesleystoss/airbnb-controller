@@ -84,8 +84,8 @@ class CheckoutController extends Controller
                 $dataExpiracao = $assinatura->data_expiracao;
                 $agora = now();
                 $totalDiasCiclo = $dataInicio->diffInDays($dataExpiracao) ?: 1;
-                $diffDias = $dataInicio ? $agora->diffInDays($dataInicio, false) : null;
-                if ($dataInicio && $diffDias !== null && $diffDias >= 0 && $diffDias <= 7) {
+                $diasDesdeInicio = $dataInicio ? $dataInicio->diffInDays($agora, false) : null;
+                if ($dataInicio && $diasDesdeInicio !== null && $diasDesdeInicio >= 0 && $diasDesdeInicio < 7) {
                     $valorEstorno = $assinatura->valor;
                     $tipoEstorno = 'integral';
                     $mensagemEstorno = 'Você receberá o estorno integral de R$ ' . number_format($valorEstorno, 2, ',', '.');
@@ -130,8 +130,8 @@ class CheckoutController extends Controller
             $agora = now();
 
             // Verifica se está dentro do prazo de 7 dias para reembolso
-            $diffDias = $dataInicio ? $agora->diffInDays($dataInicio, false) : null;
-            if ($dataInicio && $diffDias !== null && $diffDias >= 0 && $diffDias <= 7) {
+            $diasDesdeInicio = $dataInicio ? $dataInicio->diffInDays($agora, false) : null;
+            if ($dataInicio && $diasDesdeInicio !== null && $diasDesdeInicio >= 0 && $diasDesdeInicio < 7) {
                 // Tenta estornar o pagamento total via API do Mercado Pago
                 $refundResponse = \Illuminate\Support\Facades\Http::withHeaders([
                     'Authorization' => 'Bearer ' . $accessToken,
