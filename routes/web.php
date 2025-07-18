@@ -85,7 +85,8 @@ Route::get('/assinatura', function () {
 })->name('assinatura');
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/assinatura/cancelar', [CheckoutController::class, 'cancelar'])->name('assinatura.cancelar');
+    Route::get('/assinatura/cancelar', [\App\Http\Controllers\CheckoutController::class, 'cancelar'])->name('assinatura.cancelar.form');
+    Route::post('/assinatura/cancelar', [\App\Http\Controllers\CheckoutController::class, 'cancelar'])->name('assinatura.cancelar');
 });
 
 // Rota de teste para o webhook (apenas para debug)
