@@ -13,7 +13,7 @@ class MercadoPagoWebhookController extends Controller
     public function handle(Request $request)
     {
         try {
-            // Loga o payload recebido para debug
+        // Loga o payload recebido para debug
             Log::info('Webhook Mercado Pago recebido:', [
                 'headers' => $request->headers->all(),
                 'body' => $request->all(),
