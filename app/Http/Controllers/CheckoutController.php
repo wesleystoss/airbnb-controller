@@ -34,9 +34,9 @@ class CheckoutController extends Controller
             ],
             'external_reference' => Auth::user()->id, // ID do usuário para identificar no webhook
             'back_urls' => [
-                'success' => 'https://a5dfef01245f.ngrok-free.app/',
-                'failure' => 'https://a5dfef01245f.ngrok-free.app/assinatura',
-                'pending' => 'https://a5dfef01245f.ngrok-free.app/assinatura',
+                'success' => 'https://airbnb.wesleystoss.com.br/',
+                'failure' => 'https://airbnb.wesleystoss.com.br/assinatura',
+                'pending' => 'https://airbnb.wesleystoss.com.br/assinatura',
             ],
             'auto_return' => 'approved',
         ];
