@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -65,21 +66,28 @@ class CheckoutController extends Controller
         }
 
         $accessToken = config('services.mercadopago.access_token');
+        $dataInicio = $assinatura->data_inicio;
+        $agora = now();
 
-        // Cancela a assinatura no Mercado Pago
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $accessToken,
-            'Content-Type' => 'application/json',
-        ])->put("https://api.mercadopago.com/preapproval/{$assinatura->payment_id}", [
-            'status' => 'cancelled'
-        ]);
+        // Verifica se está dentro do prazo de 7 dias para reembolso
+        if ($dataInicio && $agora->diffInDays($dataInicio) <= 7) {
+            // Tenta estornar o pagamento via API do Mercado Pago
+            $refundResponse = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $accessToken,
+                'Content-Type' => 'application/json',
+                'X-Idempotency-Key' => (string) Str::uuid(), // Gera um UUID único
+            ])->post("https://api.mercadopago.com/v1/payments/{$assinatura->payment_id}/refunds");
 
-        if ($response->successful()) {
-            // Cancela localmente também
-            $assinatura->cancelar();
-            return back()->with('success', 'Assinatura cancelada com sucesso');
+            if ($refundResponse->successful()) {
+                $assinatura->cancelar();
+                return back()->with('success', 'Assinatura cancelada e valor estornado com sucesso. O reembolso será processado pelo Mercado Pago.');
+            } else {
+                return back()->with('error', 'Erro ao estornar o pagamento: ' . $refundResponse->body());
+            }
         } else {
-            return back()->with('error', 'Erro ao cancelar assinatura: ' . $response->body());
+            // Fora do prazo de reembolso, apenas cancela localmente
+            $assinatura->cancelar();
+            return back()->with('success', 'Assinatura cancelada. O prazo para reembolso automático já expirou.');
         }
     }
 } 
