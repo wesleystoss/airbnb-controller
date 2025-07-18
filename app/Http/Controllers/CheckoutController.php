@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class CheckoutController extends Controller
 {
@@ -12,44 +13,72 @@ class CheckoutController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        // Use o access token do .env via config
+        
         $accessToken = config('services.mercadopago.access_token');
+        $user = Auth::user();
 
-        $preference = [
-            'items' => [[
-                'title' => 'Assinatura Airbnb Controle',
-                'quantity' => 1,
-                'currency_id' => 'BRL',
-                'unit_price' => 1,
-            ]],
-            'payer' => [
-                'email' => Auth::user()->email,
+        // Cria uma assinatura recorrente no Mercado Pago
+        $subscription = [
+            'reason' => 'Assinatura Airbnb Controle',
+            'auto_recurring' => [
+                'frequency' => 1,
+                'frequency_type' => 'months',
+                'transaction_amount' => 39.90,
+                'currency_id' => 'BRL'
             ],
-            'external_reference' => Auth::user()->id, // ID do usuário para identificar no webhook
-            'back_urls' => [
-                'success' => 'https://a5dfef01245f.ngrok-free.app/',
-                'failure' => 'https://a5dfef01245f.ngrok-free.app/assinatura',
-                'pending' => 'https://a5dfef01245f.ngrok-free.app/assinatura',
-            ],
-            'auto_return' => 'approved',
+            'back_url' => 'https://a5dfef01245f.ngrok-free.app/assinatura?success=true',
+            'external_reference' => $user->id,
+            'payer_email' => $user->email
         ];
 
-        $response = \Illuminate\Support\Facades\Http::withHeaders([
+        $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type' => 'application/json',
-        ])->withBody(json_encode($preference), 'application/json')
-          ->post('https://api.mercadopago.com/checkout/preferences');
+        ])->post('https://api.mercadopago.com/preapproval', $subscription);
 
         if ($response->successful() && isset($response['init_point'])) {
             return redirect($response['init_point']);
         } else {
             $debugInfo = [
                 'access_token' => $accessToken,
-                'payer_email' => Auth::user()->email,
-                'request' => $preference,
+                'payer_email' => $user->email,
+                'request' => $subscription,
                 'response' => $response->json(),
             ];
-            return back()->with('error', 'Erro ao criar preferência de pagamento: ' . json_encode($debugInfo));
+            return back()->with('error', 'Erro ao criar assinatura recorrente: ' . json_encode($debugInfo));
+        }
+    }
+
+    // Método para cancelar assinatura
+    public function cancelar(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $user = Auth::user();
+        $assinatura = $user->assinaturaAtiva;
+
+        if (!$assinatura) {
+            return back()->with('error', 'Nenhuma assinatura ativa encontrada');
+        }
+
+        $accessToken = config('services.mercadopago.access_token');
+
+        // Cancela a assinatura no Mercado Pago
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+            'Content-Type' => 'application/json',
+        ])->put("https://api.mercadopago.com/preapproval/{$assinatura->payment_id}", [
+            'status' => 'cancelled'
+        ]);
+
+        if ($response->successful()) {
+            // Cancela localmente também
+            $assinatura->cancelar();
+            return back()->with('success', 'Assinatura cancelada com sucesso');
+        } else {
+            return back()->with('error', 'Erro ao cancelar assinatura: ' . $response->body());
         }
     }
 } 
