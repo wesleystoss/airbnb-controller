@@ -50,4 +50,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(\App\Models\Locacao::class, 'locacao_user')->withPivot('papel')->withTimestamps();
     }
+
+    public function assinaturas()
+    {
+        return $this->hasMany(Assinatura::class);
+    }
+
+    public function assinaturaAtiva()
+    {
+        return $this->hasOne(Assinatura::class)->where('status', 'ativa')->where('data_expiracao', '>', now());
+    }
 }

@@ -25,6 +25,7 @@ class CheckoutController extends Controller
             'payer' => [
                 'email' => Auth::user()->email,
             ],
+            'external_reference' => Auth::user()->id, // ID do usuário para identificar no webhook
             'back_urls' => [
                 'success' => 'https://a5dfef01245f.ngrok-free.app/',
                 'failure' => 'https://a5dfef01245f.ngrok-free.app/assinatura',
