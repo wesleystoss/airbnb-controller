@@ -19,6 +19,32 @@ Script completo de monitoramento que verifica:
 ./scripts/monitor_assinaturas.sh
 ```
 
+### 2. `configurar_hostinger.sh`
+Script automatizado para configurar cron jobs na Hostinger:
+- 🔧 Configura cron jobs automaticamente
+- ✅ Verifica PHP e comandos Artisan
+- 🛠️ Detecta caminhos do PHP na Hostinger
+- 📝 Cria logs de cron jobs
+- 🔍 Testa comandos após configuração
+- 📊 Configura monitoramento opcional
+
+**Uso:**
+```bash
+./scripts/configurar_hostinger.sh
+```
+
+**Exemplo de uso na Hostinger:**
+```bash
+# 1. Conectar via SSH
+ssh usuario@seudominio.com
+
+# 2. Navegar para o projeto
+cd /home/usuario/public_html/airbnb
+
+# 3. Executar script
+./scripts/configurar_hostinger.sh
+```
+
 **Saída esperada:**
 ```
 🔍 Monitoramento de Assinaturas - Airbnb Controle
