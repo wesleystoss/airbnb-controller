@@ -50,7 +50,7 @@ fi
 
 # 5. Verificar status do webhook
 echo -e "\n${YELLOW}🌐 Verificando status do webhook...${NC}"
-WEBHOOK_URL="https://044157ce8acc.ngrok-free.app/api/webhook/mercadopago"
+WEBHOOK_URL="https://airbnb.wesleystoss.com.br/api/webhook/mercadopago"
 TEST_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST $WEBHOOK_URL \
   -H "Content-Type: application/json" \
   -d '{"test": "monitoring"}')

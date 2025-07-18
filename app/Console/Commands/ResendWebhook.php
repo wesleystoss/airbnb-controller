@@ -50,7 +50,7 @@ class ResendWebhook extends Command
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'User-Agent' => 'MercadoPago-Webhook-Resend/1.0'
-            ])->post('https://044157ce8acc.ngrok-free.app/api/webhook/mercadopago', $webhookPayload);
+            ])->post('https://airbnb.wesleystoss.com.br/api/webhook/mercadopago', $webhookPayload);
             
             if ($response->successful()) {
                 $this->info('✅ Webhook reenviado com sucesso!');
