@@ -63,6 +63,12 @@ class CheckoutController extends Controller
             return back()->with('error', 'Nenhuma assinatura ativa encontrada');
         }
 
+        // Se for assinatura gratuita/manual, cancela só localmente
+        if (str_starts_with($assinatura->payment_id, 'GRATUITA_')) {
+            $assinatura->cancelar();
+            return back()->with('success', 'Assinatura gratuita cancelada com sucesso.');
+        }
+
         $accessToken = config('services.mercadopago.access_token');
 
         // Cancela a assinatura no Mercado Pago

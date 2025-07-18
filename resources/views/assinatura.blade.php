@@ -9,8 +9,8 @@
         @if(session('error'))
             <div class="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded">{{ session('error') }}</div>
         @endif
-        @if(session('success'))
-            <div class="mb-4 p-4 bg-green-50 text-green-700 border border-green-200 rounded">{{ session('success') }}</div>
+        @if(session()->has('success'))
+            <div class="mb-4 p-4 bg-green-50 text-green-700 border border-green-200 rounded">{{ session()->pull('success') }}</div>
         @endif
         @if(session('warning'))
             <div class="mb-4 p-4 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded">{{ session('warning') }}</div>
@@ -198,12 +198,6 @@
                     ← Voltar para onde você estava
                 </a>
             </div>
-            <script>
-                // Redireciona automaticamente após 3 segundos
-                setTimeout(function() {
-                    window.location.href = '{{ session('url.intended') }}';
-                }, 3000);
-            </script>
         @endif
     </div>
 </div>
