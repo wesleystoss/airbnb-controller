@@ -158,75 +158,78 @@
         @else
             <div class="space-y-3">
                 @foreach($events as $event)
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2">
-                                        @if(isset($event['summary']))
-                                            @if($event['summary'] === 'Reserved' || strpos($event['summary'], 'Reservado') !== false)
-                                                <span class="text-2xl">🏠</span>
-                                                <h3 class="font-semibold text-[#222]">Reservado</h3>
-                                            @elseif($event['summary'] === 'Airbnb (Not available)' || strpos($event['summary'], 'Indisponível') !== false)
-                                                <span class="text-2xl">🚫</span>
-                                                <h3 class="font-semibold text-[#222]">Indisponível</h3>
+                {{-- Adiciona a condição para verificar se o evento é uma reserva antes de exibir --}}
+                    @if(isset($event['summary']) && ($event['summary'] === 'Reserved' || strpos($event['summary'], 'Reservado') !== false))
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <div class="flex items-center gap-2">
+                                            @if(isset($event['summary']))
+                                                @if($event['summary'] === 'Reserved' || strpos($event['summary'], 'Reservado') !== false)
+                                                    <span class="text-2xl">🏠</span>
+                                                    <h3 class="font-semibold text-[#222]">Reservado</h3>
+                                                @elseif($event['summary'] === 'Airbnb (Not available)' || strpos($event['summary'], 'Indisponível') !== false)
+                                                    <span class="text-2xl">🚫</span>
+                                                    <h3 class="font-semibold text-[#222]">Indisponível</h3>
+                                                @else
+                                                    <span class="text-2xl">📅</span>
+                                                    <h3 class="font-semibold text-[#222]">{{ $event['summary'] }}</h3>
+                                                @endif
                                             @else
                                                 <span class="text-2xl">📅</span>
-                                                <h3 class="font-semibold text-[#222]">{{ $event['summary'] }}</h3>
+                                                <h3 class="font-semibold text-[#222]">Evento sem título</h3>
                                             @endif
-                                        @else
-                                            <span class="text-2xl">📅</span>
-                                            <h3 class="font-semibold text-[#222]">Evento sem título</h3>
+                                        </div>
+                                        @if(isset($event['has_locacao']) && $event['has_locacao'])
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Registrada
+                                            </span>
+                                        @elseif(isset($event['summary']) && (strpos($event['summary'], 'Reserved') !== false || strpos($event['summary'], 'Reservado') !== false))
+                                            <a href="{{ route('locacoes.create', ['imovel_id' => $imovel->id, 'data_inicio' => $event['start']->format('Y-m-d'), 'data_fim' => $event['end']->format('Y-m-d'), 'nome' => 'Reserva Airbnb - ' . $event['start']->format('d/m/Y')]) }}" 
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                                </svg>
+                                                Registrar
+                                            </a>
                                         @endif
                                     </div>
-                                    @if(isset($event['has_locacao']) && $event['has_locacao'])
-                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            Registrada
-                                        </span>
-                                    @elseif(isset($event['summary']) && (strpos($event['summary'], 'Reserved') !== false || strpos($event['summary'], 'Reservado') !== false))
-                                        <a href="{{ route('locacoes.create', ['imovel_id' => $imovel->id, 'data_inicio' => $event['start']->format('Y-m-d'), 'data_fim' => $event['end']->format('Y-m-d'), 'nome' => 'Reserva Airbnb - ' . $event['start']->format('d/m/Y')]) }}" 
-                                           class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                            </svg>
-                                            Registrar
-                                        </a>
-                                    @endif
-                                </div>
-                                <div class="flex flex-wrap gap-4 text-sm text-gray-600">
-                                    @if(isset($event['start']))
-                                        <div class="flex items-center gap-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                            <span>Data de início: {{ $event['start']->format('d/m/Y') }}</span>
-                                        </div>
-                                    @endif
-                                    @if(isset($event['end']))
-                                        <div class="flex items-center gap-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                            <span>Data de fim: {{ $event['end']->format('d/m/Y') }}</span>
-                                        </div>
-                                    @endif
-                                </div>
-                                @if(isset($event['description']))
-                                    <div class="mt-2 text-sm text-gray-600">
-                                        <span class="font-medium">Detalhes:</span> 
-                                        @if(strpos($event['description'], 'Reservation URL:') === 0)
-                                            🔗 Link da reserva: {{ str_replace('Reservation URL: ', '', $event['description']) }}
-                                        @else
-                                            {{ $event['description'] }}
+                                    <div class="flex flex-wrap gap-4 text-sm text-gray-600">
+                                        @if(isset($event['start']))
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                <span>Data de início: {{ $event['start']->format('d/m/Y') }}</span>
+                                            </div>
+                                        @endif
+                                        @if(isset($event['end']))
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                <span>Data de fim: {{ $event['end']->format('d/m/Y') }}</span>
+                                            </div>
                                         @endif
                                     </div>
-                                @endif
+                                    @if(isset($event['description']))
+                                        <div class="mt-2 text-sm text-gray-600">
+                                            <span class="font-medium">Detalhes:</span> 
+                                            @if(strpos($event['description'], 'Reservation URL:') === 0)
+                                                🔗 Link da reserva: {{ str_replace('Reservation URL: ', '', $event['description']) }}
+                                            @else
+                                                {{ $event['description'] }}
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 @endforeach
             </div>
         @endif
